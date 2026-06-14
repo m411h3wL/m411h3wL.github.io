@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matt Lindley — Building with AI</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: #1e1e2e;
+      --accent: #7c5cfc;
+      --accent-glow: #7c5cfc33;
+      --text: #e2e2f0;
+      --muted: #6b6b8a;
+      --tag-bg: #1a1a2e;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+      position: relative;
+    }
+
+    /* Hero */
+    .hero {
+      margin-bottom: 72px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px #4ade80;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #7c5cfc, #a78bfa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 36px;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      background: #8f6dfc;
+      box-shadow: 0 0 32px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: #a78bfa;
+      transform: translateY(-1px);
+    }
+
+    /* About */
+    .section {
+      margin-bottom: 60px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .section h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+    }
+
+    .prose {
+      color: var(--muted);
+      font-size: 0.97rem;
+      line-height: 1.75;
+    }
+
+    .prose strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Focus areas */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Stack */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 13px;
+      color: var(--muted);
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .tag:hover {
+      color: #a78bfa;
+      border-color: var(--accent);
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 60px 0;
+    }
+
+    /* Footer */
+    footer {
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: #a78bfa;
+    }
+
+    @media (max-width: 480px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        Open to opportunities — June 2026
+      </div>
+      <h1>Hi, I'm Matt.<br /><span>I build with Claude.</span></h1>
+      <p class="tagline">
+        Just graduated and going all-in on AI-powered automation — sales pipelines,
+        self-learning agents, and systems that get smarter over time.
+      </p>
+      <div class="cta-row">
+        <a href="https://github.com/m411h3wL" class="btn btn-primary" target="_blank" rel="noopener">
+          GitHub
+        </a>
+        <a href="mailto:msl226@lehigh.edu" class="btn btn-ghost">
+          Get in touch
+        </a>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section">
+      <div class="section-label">About</div>
+      <h2>The background</h2>
+      <p class="prose">
+        I recently graduated and immediately dove into the thing I find most exciting right now:
+        <strong>building real automations with Claude and modern AI</strong>. Not toy demos — actual
+        workflows that save time, learn from data, and compound in value.
+        <br /><br />
+        I'm obsessed with the idea that a small team (or even one person) armed with the right AI
+        tools can now build what previously required entire departments. That gap is where I want to
+        live and work.
+      </p>
+    </section>
+
+    <!-- Focus areas -->
+    <section class="section">
+      <div class="section-label">What I'm Building</div>
+      <h2>Focus areas</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3>Sales Automation</h3>
+          <p>AI-driven outreach, lead scoring, and follow-up pipelines that run while you sleep.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧠</div>
+          <h3>Self-Learning Agents</h3>
+          <p>Systems that get better with each run — feedback loops, memory, and continuous improvement.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📈</div>
+          <h3>Optimization</h3>
+          <p>Finding the highest-leverage points in a workflow and automating them intelligently.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🤖</div>
+          <h3>Building with Claude</h3>
+          <p>Learning the Claude API, MCP, tool use, and agent patterns to ship faster and smarter.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Stack -->
+    <section class="section">
+      <div class="section-label">Stack & Interests</div>
+      <h2>What I'm learning</h2>
+      <div class="tags">
+        <span class="tag">Claude API</span>
+        <span class="tag">Anthropic SDK</span>
+        <span class="tag">MCP Servers</span>
+        <span class="tag">Agentic Workflows</span>
+        <span class="tag">Python</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Sales Tech</span>
+        <span class="tag">Prompt Engineering</span>
+        <span class="tag">AI Agents</span>
+        <span class="tag">Automation</span>
+        <span class="tag">GitHub Pages</span>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <span>Matt Lindley &mdash; 2026</span>
+      <div style="display:flex;gap:20px;">
+        <a href="https://github.com/m411h3wL" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:msl226@lehigh.edu">Email</a>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
