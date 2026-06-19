@@ -244,8 +244,8 @@ function createPost() {
             <p>&copy; 2026 m411h3wL. All rights reserved.</p>
             <div class="social-links">
                 <a href="https://github.com/m411h3wL" target="_blank">GitHub</a>
-                <a href="https://twitter.com" target="_blank">Twitter</a>
-                <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+                <a href="https://x.com/mattslindley" target="_blank">Twitter</a>
+                <a href="https://www.linkedin.com/in/matt-lindley/" target="_blank">LinkedIn</a>
             </div>
         </div>
     </footer>
