@@ -47,6 +47,12 @@
 
                 <h2>Approach</h2>
                 <p>The app is a React + TypeScript front end built with Vite. Each company renders as a radial diagram: a central hub node with spokes branching out to job, location, and contact "leaves." A few implementation details mattered more than expected:</p>
+
+                <div class="figure">
+                    <img src="../assets/projects/outreach-graph/company-view.png" alt="Outreach Graph company view for Halcyon Biosciences, showing a hub-and-spoke diagram of job openings, office locations, and outreach contacts">
+                    <figcaption><strong>Figure 1.</strong> The company view for a single search target, with branches for open roles, office locations, and the people I've reached out to. The orange "!" badges and the red node rim mark contacts overdue for a follow-up.</figcaption>
+                </div>
+
                 <ul>
                     <li><strong>Custom layout, not a graph library.</strong> Node positions, spoke angles, and leaf radii are computed directly (<code>spokePositions</code>, <code>buildInitialPositions</code>) rather than handed to a force-directed layout engine — which keeps the diagram stable and readable instead of drifting every time data changes.</li>
                     <li><strong>Text-aware sizing.</strong> A <code>computeLeafLayout</code> helper shrinks a leaf's font size to fit its label before growing the circle itself, so a long company or contact name doesn't break the diagram.</li>
