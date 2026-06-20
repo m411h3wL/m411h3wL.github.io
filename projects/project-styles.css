@@ -1,0 +1,183 @@
+/* Research-paper styling for project write-ups */
+
+.paper {
+    padding: 60px 0 80px;
+}
+
+.paper-header {
+    max-width: 720px;
+    margin: 0 auto 2.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2rem;
+}
+
+.paper-header h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 2.1rem;
+    line-height: 1.3;
+    color: #1e293b;
+    margin-bottom: 0.75rem;
+}
+
+.paper-byline {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+.paper-byline .affiliation {
+    display: block;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.paper-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.paper-tags .tag {
+    background: var(--light);
+    color: var(--primary);
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.paper-body {
+    max-width: 720px;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #2d3748;
+    line-height: 1.75;
+    font-size: 1.05rem;
+}
+
+.abstract {
+    background: var(--light);
+    border-left: 3px solid var(--primary);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2.5rem;
+    font-size: 0.98rem;
+}
+
+.abstract strong {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    color: var(--secondary);
+    margin-bottom: 0.5rem;
+}
+
+.paper-body h2 {
+    font-size: 1.4rem;
+    color: #1e293b;
+    margin: 2.5rem 0 1rem;
+}
+
+.paper-body p {
+    margin-bottom: 1.25rem;
+}
+
+.paper-body ul,
+.paper-body ol {
+    margin: 0 0 1.25rem 1.5rem;
+}
+
+.paper-body li {
+    margin-bottom: 0.5rem;
+}
+
+.paper-body strong {
+    color: #1e293b;
+}
+
+.figure {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.figure img {
+    max-width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.figure figcaption {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.85rem;
+    color: var(--secondary);
+    margin-top: 0.6rem;
+    line-height: 1.5;
+}
+
+.figure figcaption strong {
+    color: #475569;
+}
+
+/* Responsive 16:9 wrapper, for whenever a demo video gets added to a write-up */
+.video-embed {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    margin: 2rem 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #000;
+}
+
+.video-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.references {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.9rem;
+    color: #475569;
+    margin: 0 0 1.25rem 1.5rem;
+}
+
+.references li {
+    margin-bottom: 0.75rem;
+    padding-left: 0.25rem;
+}
+
+.paper-footer {
+    max-width: 720px;
+    margin: 3rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.back-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    color: var(--primary-dark);
+}
+
+@media (max-width: 768px) {
+    .paper-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .paper-body {
+        padding: 0 1rem;
+        font-size: 1rem;
+    }
+}

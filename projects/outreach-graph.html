@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outreach Graph - m411h3wL</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="project-styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">m411h3wL</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/#projects">Projects</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+                <li><a href="/#about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <article class="paper">
+        <div class="container">
+            <div class="paper-header">
+                <h1>Outreach Graph: A Visual Map for a Job Search</h1>
+                <p class="paper-byline">
+                    Matthew Lindley
+                    <span class="affiliation">Personal project, 2026</span>
+                </p>
+                <div class="paper-tags">
+                    <span class="tag">React</span>
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">Data Visualization</span>
+                    <span class="tag">Job Search</span>
+                </div>
+            </div>
+
+            <div class="paper-body">
+                <div class="abstract">
+                    <strong>Abstract</strong>
+                    A spreadsheet is a poor map for a job search — every company has multiple postings, multiple contacts, and a follow-up clock running on each one, and none of that structure survives in rows and columns. Outreach Graph renders a search as a literal graph: each company sits at the center of a hub-and-spoke diagram connecting it to its open roles, locations, and the people I've reached out to, with stale contacts visually flagged.
+                </div>
+
+                <h2>Motivation</h2>
+                <p>A few weeks into outreach, I had companies tracked in one tab, contacts in another, and applications in a third — and no single view of which relationships actually needed attention that day. The information itself wasn't complicated: a company has jobs, jobs have locations, and people sit somewhere in between. What was missing was a layout that made the structure visible at a glance, and that surfaced who I'd gone quiet on.</p>
+
+                <h2>Approach</h2>
+                <p>The app is a React + TypeScript front end built with Vite. Each company renders as a radial diagram: a central hub node with spokes branching out to job, location, and contact "leaves." A few implementation details mattered more than expected:</p>
+                <ul>
+                    <li><strong>Custom layout, not a graph library.</strong> Node positions, spoke angles, and leaf radii are computed directly (<code>spokePositions</code>, <code>buildInitialPositions</code>) rather than handed to a force-directed layout engine — which keeps the diagram stable and readable instead of drifting every time data changes.</li>
+                    <li><strong>Text-aware sizing.</strong> A <code>computeLeafLayout</code> helper shrinks a leaf's font size to fit its label before growing the circle itself, so a long company or contact name doesn't break the diagram.</li>
+                    <li><strong>Staleness as a first-class signal.</strong> A <code>needsAlert</code> check flags any contact who hasn't been followed up with in more than five days, rendering their node with a red rim instead of green — the graph doubles as a to-do list.</li>
+                    <li><strong>Local persistence.</strong> Edits are diffed against the last saved snapshot (<code>hasUnsavedChanges</code>) and written back through a small <code>/save-data</code> endpoint, so the dataset is just a JSON file rather than a database.</li>
+                </ul>
+                <p>It also folds in resume and cover-letter generation, building <code>.docx</code> output directly from the same company/role data instead of re-typing context into a separate document each time.</p>
+
+                <h2>Status</h2>
+                <p>This one is actively in use for my own search rather than a finished, polished product — the data model and layout have changed as the search itself has changed.</p>
+
+                <h2>Reflection</h2>
+                <p>The decision that paid off was treating "needs follow-up" as a property of the layout, not a separate report. Because the urgency signal lives directly on the node you'd already be looking at, there's no second view to check and no spreadsheet column to remember to sort by.</p>
+
+                <ol class="references">
+                    <li>React — UI library, <a href="https://react.dev/" target="_blank">react.dev</a></li>
+                    <li>Vite — front-end build tool, <a href="https://vitejs.dev/" target="_blank">vitejs.dev</a></li>
+                    <li>docx — programmatic Word document generation, <a href="https://www.npmjs.com/package/docx" target="_blank">npmjs.com/package/docx</a></li>
+                </ol>
+            </div>
+
+            <div class="paper-footer">
+                <a href="/#projects" class="back-link">← Back to Projects</a>
+            </div>
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 m411h3wL. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/m411h3wL" target="_blank">GitHub</a>
+                <a href="https://x.com/mattslindley" target="_blank">X</a>
+                <a href="https://www.linkedin.com/in/matt-lindley/" target="_blank">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

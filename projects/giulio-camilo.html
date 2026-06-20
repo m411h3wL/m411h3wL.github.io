@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giulio Camilo - m411h3wL</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="project-styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">m411h3wL</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/#projects">Projects</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+                <li><a href="/#about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <article class="paper">
+        <div class="container">
+            <div class="paper-header">
+                <h1>Giulio Camilo: A Flashcard Engine Named After a Memory Theater</h1>
+                <p class="paper-byline">
+                    Matthew Lindley
+                    <span class="affiliation">Personal project, 2026</span>
+                </p>
+                <div class="paper-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Flask</span>
+                    <span class="tag">Spaced Repetition</span>
+                </div>
+            </div>
+
+            <div class="paper-body">
+                <div class="abstract">
+                    <strong>Abstract</strong>
+                    A small, self-hosted flashcard app for spaced repetition, named after Giulio Camillo, the 16th-century philosopher who designed a literal wooden "Memory Theater" meant to hold all human knowledge in spatial form. This version is considerably less ambitious — a Flask app and a JSON file — but the goal is the same: turn scattered facts into something you actually retain.
+                </div>
+
+                <h2>Motivation</h2>
+                <p>Most flashcard tools are built for someone else's curriculum. I wanted decks built around exactly what I was trying to retain in a given week — consulting frameworks, vocabulary, the basics of the stack I was building this in — without fighting an app's opinions about how a card should look.</p>
+
+                <h2>Approach</h2>
+                <p>The whole thing is deliberately small:</p>
+                <ul>
+                    <li>A single <code>data.json</code> defines <strong>decks</strong> (named groupings) and <strong>memory queues</strong> — each one a question paired with an optional answer, image, and sound clip.</li>
+                    <li>A Flask route reads that file, resolves each card's image and audio paths, and renders the deck.</li>
+                    <li>A timer view paces review sessions, since spaced repetition is as much about cadence as content.</li>
+                </ul>
+                <p>There's no database and no auth — the data model is a JSON file because a JSON file is the right amount of structure for a tool only one person uses.</p>
+
+                <h2>Status</h2>
+                <p>Runs locally, used for my own studying. It's the kind of project that doesn't need a public deployment to be worth having built.</p>
+
+                <h2>Reflection</h2>
+                <p>The constraint that mattered was resisting the urge to generalize it. It would be easy to add user accounts, a real database, a deck marketplace — none of that was the actual problem. The actual problem was "I keep forgetting this," and a JSON file and a Flask route solved it.</p>
+
+                <ol class="references">
+                    <li>Yates, F. <em>The Art of Memory.</em> University of Chicago Press, 1966 — on Giulio Camillo's Theatro della Memoria and the broader tradition of memory palaces.</li>
+                    <li>Flask — Python web framework, <a href="https://flask.palletsprojects.com/" target="_blank">flask.palletsprojects.com</a></li>
+                </ol>
+            </div>
+
+            <div class="paper-footer">
+                <a href="https://github.com/m411h3wL/GiulioCamilo" class="back-link" target="_blank">View Code →</a>
+            </div>
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 m411h3wL. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/m411h3wL" target="_blank">GitHub</a>
+                <a href="https://x.com/mattslindley" target="_blank">X</a>
+                <a href="https://www.linkedin.com/in/matt-lindley/" target="_blank">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

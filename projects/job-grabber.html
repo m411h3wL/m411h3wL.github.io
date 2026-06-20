@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Grabber - m411h3wL</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="project-styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">m411h3wL</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/#projects">Projects</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+                <li><a href="/#about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <article class="paper">
+        <div class="container">
+            <div class="paper-header">
+                <h1>Job Grabber: A Command-Line Aggregator for Job Listings</h1>
+                <p class="paper-byline">
+                    Matthew Lindley
+                    <span class="affiliation">Personal project, 2026</span>
+                </p>
+                <div class="paper-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">CLI</span>
+                    <span class="tag">Web Scraping</span>
+                    <span class="tag">Automation</span>
+                </div>
+            </div>
+
+            <div class="paper-body">
+                <div class="abstract">
+                    <strong>Abstract</strong>
+                    A job search means checking the same handful of sites over and over for postings that match a query. Job Grabber is a Python command-line tool that searches multiple job boards at once, normalizes the results into a common schema, and exports them to a table, JSON, or CSV — so the search loop becomes one command instead of a dozen browser tabs.
+                </div>
+
+                <h2>Motivation</h2>
+                <p>While applying to roles after graduation, I noticed the actual bottleneck wasn't finding postings — it was the repetition of opening Indeed, then LinkedIn, then re-running the same query with slightly different filters, then manually copying anything relevant into a spreadsheet. None of that requires a human in the loop. It's exactly the kind of repetitive, well-defined task that belongs in a script.</p>
+
+                <h2>Approach</h2>
+                <p>Job Grabber is structured as a small, extensible CLI built with <strong>Click</strong>. A <code>search</code> command takes a query, location, and source, and dispatches to one or more scraper classes that share a common interface:</p>
+                <ul>
+                    <li>A <code>BaseScraper</code> abstract class defines the contract — a <code>search()</code> method that returns a list of <code>Job</code> records — and handles shared concerns like request headers and timeouts.</li>
+                    <li><code>IndeedScraper</code> and <code>LinkedInScraper</code> each implement that contract by paginating through search results with <strong>requests</strong> and parsing the HTML with <strong>BeautifulSoup</strong>.</li>
+                    <li>Every result is normalized into a single <code>Job</code> dataclass (title, company, location, URL, source, salary, posted date), regardless of which site it came from.</li>
+                    <li>Results render as a formatted table in the terminal via <strong>rich</strong>, or export to <code>.json</code> / <code>.csv</code> for further filtering.</li>
+                </ul>
+                <p>The scraper interface was the part worth getting right: adding a third source should mean writing one new class, not touching the CLI, the output formatting, or anything else.</p>
+
+                <h2>Limitations</h2>
+                <p>This is a scraper, not an API client, which means it's only as reliable as the HTML structure of the sites it targets — a markup change on Indeed's end can silently break a selector. It currently runs locally rather than on a schedule, so it's a tool I reach for deliberately rather than a background service.</p>
+
+                <h2>Reflection</h2>
+                <p>The most useful design decision was separating the scraping logic from the data model. Because every scraper returns the same <code>Job</code> shape, the table/JSON/CSV output code never has to know which site a result came from — and the test suite can validate the output format without making a single real HTTP request.</p>
+
+                <ol class="references">
+                    <li>Click — Python composable command-line interfaces, <a href="https://click.palletsprojects.com/" target="_blank">click.palletsprojects.com</a></li>
+                    <li>BeautifulSoup4 — HTML parsing, <a href="https://www.crummy.com/software/BeautifulSoup/" target="_blank">crummy.com/software/BeautifulSoup</a></li>
+                    <li>Rich — terminal formatting for Python, <a href="https://rich.readthedocs.io/" target="_blank">rich.readthedocs.io</a></li>
+                </ol>
+            </div>
+
+            <div class="paper-footer">
+                <a href="/#projects" class="back-link">← Back to Projects</a>
+            </div>
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 m411h3wL. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/m411h3wL" target="_blank">GitHub</a>
+                <a href="https://x.com/mattslindley" target="_blank">X</a>
+                <a href="https://www.linkedin.com/in/matt-lindley/" target="_blank">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
