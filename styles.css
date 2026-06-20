@@ -76,8 +76,8 @@ body {
 }
 
 .hero-photo {
-    width: 220px;
-    height: 220px;
+    width: 340px;
+    height: 340px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid rgba(255, 255, 255, 0.6);
@@ -305,8 +305,8 @@ footer .container {
     }
 
     .hero-photo {
-        width: 160px;
-        height: 160px;
+        width: 220px;
+        height: 220px;
     }
 
     .hero-content h1 {
