@@ -40,6 +40,20 @@
     margin-bottom: 1.5rem;
 }
 
+.post-content a {
+    color: #2563eb;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.post-content blockquote {
+    border-left: 3px solid #cbd5e1;
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    color: #64748b;
+    font-style: italic;
+}
+
 .post-content ul,
 .post-content ol {
     margin: 1.5rem 0 1.5rem 2rem;
