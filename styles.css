@@ -255,55 +255,6 @@ body {
     font-weight: 500;
 }
 
-/* Theatre */
-.theatre {
-    padding: 80px 0;
-    background: var(--light);
-}
-
-.theatre h2 {
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    text-align: center;
-    color: var(--dark);
-}
-
-.show {
-    max-width: 900px;
-    margin: 0 auto 3rem;
-}
-
-.show:last-child {
-    margin-bottom: 0;
-}
-
-.show h3 {
-    font-size: 1.4rem;
-    color: var(--dark);
-    margin-bottom: 0.25rem;
-}
-
-.show-date {
-    display: block;
-    color: var(--secondary);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-}
-
-.show-photos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
-}
-
-.show-photos img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-}
-
 /* Footer */
 footer {
     background: var(--dark);
@@ -362,17 +313,8 @@ footer .container {
     }
 
     .projects h2,
-    .about h2,
-    .theatre h2 {
+    .about h2 {
         font-size: 2rem;
-    }
-
-    .show-photos {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    }
-
-    .show-photos img {
-        height: 160px;
     }
 
     .cta-buttons {

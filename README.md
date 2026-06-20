@@ -8,11 +8,15 @@ This is my personal portfolio and blog website built with HTML, CSS, and vanilla
 .
 ├── index.html              # Main homepage (hero, featured projects, about)
 ├── blog.html               # Blog listing page
+├── theatre.html            # Theatre photos, by show
 ├── styles.css              # Main stylesheet
 ├── blog-styles.css         # Blog-specific styles
+├── theatre-styles.css      # Theatre page styles
 ├── posts/
 │   ├── TEMPLATE.html       # copy this to start a new post
 │   ├── first-thoughts-on-bci.html
+│   ├── opening-pandoras-box-in-packard-lab.html
+│   ├── her-window-my-window.html
 │   └── post-styles.css     # Blog post styles
 ├── projects/
 │   ├── TEMPLATE.html       # copy this to start a new project write-up
@@ -20,6 +24,10 @@ This is my personal portfolio and blog website built with HTML, CSS, and vanilla
 │   ├── outreach-graph.html
 │   ├── giulio-camilo.html  # exists here, intentionally not linked from index.html
 │   └── project-styles.css  # research-paper styling for project write-ups
+├── assets/
+│   ├── headshot/           # homepage hero photo
+│   ├── theatre/             # show photos, used by theatre.html
+│   └── projects/            # screenshots/figures used in project write-ups
 ├── CONTENT.md                # manifest of what's shown vs hidden, and where
 └── README.md                # This file
 ```
