@@ -14,6 +14,13 @@
     color: #1e293b;
 }
 
+.post-header .subtitle {
+    font-size: 1.15rem;
+    font-style: italic;
+    color: #64748b;
+    margin-bottom: 1.25rem;
+}
+
 .post-meta {
     display: flex;
     justify-content: center;
