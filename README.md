@@ -27,7 +27,10 @@ This is my personal portfolio and blog website built with HTML, CSS, and vanilla
 ├── assets/
 │   ├── headshot/           # homepage hero photo
 │   ├── theatre/             # show photos, used by theatre.html
+│   ├── og-image.jpg          # default social-preview image (Open Graph/Twitter Card)
 │   └── projects/            # screenshots/figures used in project write-ups
+├── sitemap.xml                # pages search engines should index
+├── robots.txt                 # crawler rules, points to sitemap.xml
 ├── CONTENT.md                # manifest of what's shown vs hidden, and where
 └── README.md                # This file
 ```
@@ -39,11 +42,23 @@ Not every post or project gets linked from the homepage or blog listing. `posts/
 page only becomes "published" once something links to it. See `CONTENT.md` for the
 current list of what's shown vs hidden.
 
+## SEO / link previews
+
+Every real page has a `<meta name="description">`, a canonical URL, and Open
+Graph/Twitter Card tags (title, description, image) so links posted to Substack,
+X, LinkedIn, etc. render as a preview card instead of a bare URL. Pages that are
+intentionally hidden (`TEMPLATE.html` files, `projects/giulio-camilo.html`) carry
+`<meta name="robots" content="noindex">` and are left out of `sitemap.xml`.
+
+When adding a new post/project page, copy the meta block from an existing page of
+the same type and update the title/description/url/image.
+
 ## Publishing a new post
 
 1. Copy `posts/TEMPLATE.html` to `posts/your-slug.html` and fill it in.
 2. Add a `<article class="blog-card">` entry to `blog.html` (copy the existing one).
 3. Add a row to `CONTENT.md`.
+4. Add the page to `sitemap.xml` and remove the `noindex` meta tag.
 
 ## Publishing a new project
 
@@ -51,6 +66,7 @@ current list of what's shown vs hidden.
 2. To feature it on the homepage, add a `.project-card` to `index.html`'s Featured
    Projects grid. To leave it intentionally hidden, skip this step.
 3. Add a row to `CONTENT.md`.
+4. If featured, add the page to `sitemap.xml` and remove the `noindex` meta tag.
 
 
 
