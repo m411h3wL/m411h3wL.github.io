@@ -25,6 +25,7 @@
         <div class="container">
             <h1>Theatre</h1>
             <p>Shows I've been part of, Fall 2022 through Spring &amp; Fall 2026</p>
+            <a href="assets/theatre/performance-resume.pdf" class="btn btn-secondary" target="_blank">View Performance Resume (PDF)</a>
         </div>
     </section>
 
@@ -41,16 +42,6 @@
             </div>
 
             <div class="show">
-                <h3>ALYK: Act Like You Know</h3>
-                <span class="show-date">Spring 2023 · Hip Hop Theatre</span>
-                <div class="show-photos">
-                    <img src="assets/theatre/alyk-1.jpg" alt="ALYK: Act Like You Know, Spring 2023">
-                    <img src="assets/theatre/alyk-2.jpg" alt="ALYK: Act Like You Know, Spring 2023">
-                    <img src="assets/theatre/alyk-3.jpg" alt="ALYK: Act Like You Know, Spring 2023">
-                </div>
-            </div>
-
-            <div class="show">
                 <h3>Rags Parkland Sings the Songs of the Future</h3>
                 <span class="show-date">Fall 2023</span>
                 <div class="show-photos">
@@ -58,6 +49,16 @@
                     <img src="assets/theatre/rags-2.jpg" alt="Rags Parkland Sings the Songs of the Future, Fall 2023">
                     <img src="assets/theatre/rags-3.jpg" alt="Rags Parkland Sings the Songs of the Future, Fall 2023">
                     <img src="assets/theatre/rags-4.jpg" alt="Rags Parkland Sings the Songs of the Future, Fall 2023">
+                </div>
+            </div>
+
+            <div class="show">
+                <h3>ALYK: Act Like You Know</h3>
+                <span class="show-date">Spring 2023 · Hip Hop Theatre</span>
+                <div class="show-photos">
+                    <img src="assets/theatre/alyk-1.jpg" alt="ALYK: Act Like You Know, Spring 2023">
+                    <img src="assets/theatre/alyk-2.jpg" alt="ALYK: Act Like You Know, Spring 2023">
+                    <img src="assets/theatre/alyk-3.jpg" alt="ALYK: Act Like You Know, Spring 2023">
                 </div>
             </div>
 
@@ -107,5 +108,26 @@
             </div>
         </div>
     </footer>
+
+    <div id="lightbox" class="lightbox">
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        document.querySelectorAll('.show-photos img').forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+    </script>
 </body>
 </html>
