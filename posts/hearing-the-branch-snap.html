@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hearing the Branch Snap - Monte Carlo and the Inverse EEG Problem</title>
+    <meta name="description" content="What a snapped branch in the woods has to do with Monte Carlo simulation, EEG signals, and a computational physics project I'm circling back to.">
+    <link rel="canonical" href="https://m411h3wL.github.io/posts/hearing-the-branch-snap.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="m411h3wL">
+    <meta property="og:title" content="Hearing the Branch Snap - Monte Carlo and the Inverse EEG Problem">
+    <meta property="og:description" content="What a snapped branch in the woods has to do with Monte Carlo simulation, EEG signals, and a computational physics project I'm circling back to.">
+    <meta property="og:url" content="https://m411h3wL.github.io/posts/hearing-the-branch-snap.html">
+    <meta property="og:image" content="https://m411h3wL.github.io/assets/posts/hearing-the-branch-snap/eeg-forward-inverse-overview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@mattslindley">
+    <meta name="twitter:title" content="Hearing the Branch Snap - Monte Carlo and the Inverse EEG Problem">
+    <meta name="twitter:description" content="What a snapped branch in the woods has to do with Monte Carlo simulation, EEG signals, and a computational physics project I'm circling back to.">
+    <meta name="twitter:image" content="https://m411h3wL.github.io/assets/posts/hearing-the-branch-snap/eeg-forward-inverse-overview.png">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="post-styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">m411h3wL</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/#projects">Projects</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+                <li><a href="/#about">About</a></li>
+                <li><a href="../theatre.html">Theatre</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <article class="blog-post">
+        <div class="container">
+            <div class="post-header">
+                <h1>Hearing the Branch Snap</h1>
+                <p class="subtitle">Monte Carlo simulation, the inverse EEG problem, and a computational physics project from junior year that I'm circling back to.</p>
+                <div class="post-meta">
+                    <span class="date">June 22, 2026</span>
+                    <span class="reading-time">9 min read</span>
+                </div>
+            </div>
+
+            <div class="post-content">
+                <figure>
+                    <img src="../assets/posts/hearing-the-branch-snap/eeg-forward-inverse-overview.png" alt="Diagram showing EEG sensor layout with four scalp electrodes, a 2D head-model simulation of voltage diffusing outward from a dipole source over three time steps, and a graph of the four corner electrode voltages over time.">
+                    <figcaption><strong>The forward problem, in one picture.</strong> Place a known dipole inside a 2D model of the head, let the voltage diffuse outward (left), and read it off at four scalp electrodes (right). Solving the inverse problem means running that arrow backward — guessing the dipole from the electrode readings alone.</figcaption>
+                </figure>
+
+                <p>Imagine you're blindfolded in the woods and you hear a branch snap.</p>
+
+                <p>You know something happened. But what? Was it a deer? A squirrel? A person? How far away was it? Which direction did it come from?</p>
+
+                <p>The sound reaching your ears is only an observation. The underlying cause remains hidden. Worse, many different causes could produce nearly identical sounds — a deer twenty feet away might sound a lot like a person fifty feet away. The problem is fundamentally ambiguous.</p>
+
+                <p>This challenge shows up everywhere in science. We observe outputs and try to reconstruct the invisible processes that produced them. Doctors observe symptoms and infer disease. Astronomers observe light and infer the existence of distant planets. Neuroscientists observe electrical signals on the scalp and try to infer what's happening inside the brain.</p>
+
+                <p>That last one is known as the <strong>inverse EEG problem</strong>, and it's what my junior-year computational physics final project tried to chip away at.</p>
+
+                <h2>The problem: scalp voltages, hidden sources</h2>
+
+                <p>Electroencephalography (EEG) measures tiny voltage fluctuations from electrodes placed across the scalp. Those measurements are evidence that neural activity is happening somewhere inside the brain — synchronized firing of neuron populations creates dipole-like electric fields, which propagate through tissue and show up, faintly, at the surface.</p>
+
+                <p>The forward direction — source to signal — is governed by well-understood electrostatics. The reverse direction is the hard part. The inverse EEG problem is <em>ill-posed</em>: multiple internal source configurations can produce nearly identical scalp readings, so there's no clean algebraic way to invert it. It's the branch snap all over again, just with voltage instead of sound.</p>
+
+                <h2>Simulating the forward problem first</h2>
+
+                <p>Rather than starting with electrode readings and guessing at the source — the actual inverse problem — I approached it indirectly: simulate the forward problem first, on purpose, so I'd have ground truth to check against.</p>
+
+                <p>The setup leans on Laplace's equation, <code>∇²V = 0</code>, which says the voltage at any point in a source-free region equals the average of its neighbors. Discretized onto a grid, that turns into <strong>Jacobi relaxation</strong> — repeatedly resetting each grid cell to the average of its four neighbors until the whole thing settles into equilibrium. It's the same diffusion logic 3Blue1Brown uses to explain the heat equation, just applied to electric potential instead of temperature.</p>
+
+                <p>I built this up in stages, inspired by a few Open Source Physics teaching apps (<code>ElectricFieldApp</code>, <code>FieldLineApp</code>, <code>LaplaceApp</code>):</p>
+
+                <ul>
+                    <li><strong>CornerElectrodes.java</strong> — a single +100V source at the center of a small grid, insulating boundary, four "electrodes" at the corners. Just a sanity check: does a central source actually produce different readings at different corners? It does — closer corners read higher voltage, and the gap between corners is the kind of signal an inverse method would need to exploit.</li>
+                    <li><strong>EEGSimulatorApp.java</strong> — swapped the single source for a dipole (a +100V and a −100V charge placed adjacently), which is the actually-correct model: synchronized neural firing looks like a dipole, not a single point charge. Relaxing this grid produces the directional, asymmetric corner readings you'd expect from something with a polarity.</li>
+                </ul>
+
+                <p>By this point I had a working forward model: place a dipole anywhere on the grid, relax it to equilibrium, read off four corner voltages. The question became — could I run that backward?</p>
+
+                <h2>Where Monte Carlo comes in</h2>
+
+                <p>There's no closed-form inverse here. The system is underdetermined — four electrode readings, infinite possible source positions. So instead of solving for the dipole analytically, I did what you do when the analytic path is closed: sample.</p>
+
+                <p><strong>EEGSimulator2App.java</strong> placed 100 randomized dipole configurations on a 16×16 grid — a +100V/−100V pair, positioned adjacently, with the only constraint being that neither end could land on an edge or corner (where the electrodes live). For each of the 100 random placements, it relaxed the grid to equilibrium via the same Jacobi process, then recorded the four corner electrode voltages alongside the true dipole coordinates. That's the Monte Carlo move: brute-force the input space with random sampling, run the deterministic forward model on each draw, and build up an empirical dataset of (electrode reading → true source) pairs that no formula could hand you directly.</p>
+
+                <p>The output was a CSV — four voltages and four coordinates per row, 100 rows — and that dataset is what made the inverse problem tractable at all. Not by solving it, but by turning it into something a model could learn.</p>
+
+                <h2>Backsolving with machine learning</h2>
+
+                <p>With training data in hand, <strong>predictdipole.py</strong> trained a multi-output random forest regressor: four electrode voltages in, four dipole coordinates out. Think <em>Battleship</em> — given a handful of pings, guess where the ship actually is.</p>
+
+                <div class="stat-callout">
+                    <strong>Result:</strong> 5% exact-match accuracy on the held-out test set, with an average error of about 3.6 grid units on a 16×16 grid. Modest — but the scatter plots of predicted vs. true coordinates showed predictions consistently clustering near the right neighborhood, even on misses.
+                </div>
+
+                <p>That's the real takeaway: with only four electrodes and a low-resolution grid, exact localization is out of reach, but the model wasn't guessing randomly either. Sparse data still encoded real spatial structure. Which tracks with how actual clinical EEG source localization works — it leans on dense electrode arrays, anatomical priors, and regularization to constrain an otherwise hopelessly underdetermined problem. Four corners on a toy grid is about as stripped-down as that problem gets, and it still wasn't nothing.</p>
+
+                <p>If you push on this — more electrodes, denser grids, anatomically informed priors, deep models instead of random forests — you start approaching something with real stakes: localizing epileptic foci, or decoding signal for brain-computer interfaces. Toy version, real shape.</p>
+
+                <h2>Reflections</h2>
+
+                <p><em>Still filling this in.</em></p>
+
+                <p>The short version: this is me posting an old project and relearning my own insights from it, as a way of pointing myself toward where my interests are now rather than just archiving where they used to be.</p>
+
+                <p>More soon.</p>
+            </div>
+
+            <div class="post-footer">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem; color: #64748b;">
+                    Full methods, data tables, and the original report:
+                    <a href="../assets/posts/hearing-the-branch-snap/MatthewLindley_PHY380_FinalReport.pdf" target="_blank">Simulating Dipole-Based EEG Signals (PDF)</a>
+                </p>
+                <ol class="references">
+                    <li>Rayi, A., & Murr, N. (2023). Electroencephalogram. <em>StatPearls.</em></li>
+                    <li>He, H., et al. (2023). Inverse Problem for M/EEG Source Localization: A Review. <em>IEEE Transactions on Biomedical Engineering.</em></li>
+                    <li>Christian, W., & Belloni, M. (2004). Open Source Physics. <em>American Journal of Physics</em>, 72(6), 847–853.</li>
+                    <li>3Blue1Brown. (2019). Solving the Heat Equation [YouTube Video].</li>
+                </ol>
+                <a href="../blog.html" class="back-link">← Back to Blog</a>
+            </div>
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 m411h3wL. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/m411h3wL" target="_blank">GitHub</a>
+                <a href="https://x.com/mattslindley" target="_blank">X</a>
+                <a href="https://www.linkedin.com/in/matt-lindley/" target="_blank">LinkedIn</a>
+                <a href="https://www.youtube.com/@mattlindleymusic" target="_blank">YouTube</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

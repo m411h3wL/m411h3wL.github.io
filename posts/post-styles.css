@@ -61,6 +61,42 @@
     font-style: italic;
 }
 
+.post-content figure {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.post-content figure img {
+    max-width: 100%;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+}
+
+.post-content figcaption {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 0.6rem;
+    line-height: 1.5;
+}
+
+.post-content .stat-callout {
+    background: #f8fafc;
+    border-left: 3px solid #2563eb;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+}
+
+.post-content .references {
+    font-size: 0.9rem;
+    color: #475569;
+    margin: 0 0 1.5rem 1.5rem;
+}
+
+.post-content .references li {
+    margin-bottom: 0.6rem;
+}
+
 .post-content ul,
 .post-content ol {
     margin: 1.5rem 0 1.5rem 2rem;
