@@ -15,6 +15,7 @@ To **hide** something: remove its card from `blog.html` / `index.html`
 
 | File | Title | Status | Linked from |
 |---|---|---|---|
+| `the-spaceship-question.html` | The Spaceship Question | Shown | `blog.html` |
 | `hearing-the-branch-snap.html` | Hearing the Branch Snap | Shown | `blog.html` |
 | `first-thoughts-on-bci.html` | First Thoughts on Brain-Computer Interfaces | Hidden | — |
 | `opening-pandoras-box-in-packard-lab.html` | Opening Pandora's Box in Packard Lab | Shown | `blog.html` |
