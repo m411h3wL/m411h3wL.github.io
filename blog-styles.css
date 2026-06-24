@@ -32,11 +32,20 @@
     margin-bottom: 2rem;
     transition: all 0.3s;
     border-left: 4px solid #2563eb;
+    overflow: hidden;
 }
 
 .blog-card:hover {
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     transform: translateX(4px);
+}
+
+.blog-thumb {
+    display: block;
+    width: calc(100% + 4rem);
+    height: 220px;
+    margin: -2rem -2rem 1.5rem -2rem;
+    object-fit: cover;
 }
 
 .blog-header {
