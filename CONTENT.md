@@ -22,6 +22,12 @@ To **hide** something: remove its card from `blog.html` / `index.html`
 | `opening-pandoras-box-in-packard-lab.html` | Opening Pandora's Box in Packard Lab | Shown | `blog.html` |
 | `her-window-my-window.html` | Her Window, My Window | Shown (marked in progress) | `blog.html` |
 
+## Tools (root)
+
+| File | Title | Status | Linked from |
+|---|---|---|---|
+| `ear-trainer.html` | Ear Trainer | Shown | direct URL / home screen |
+
 ## Projects (`projects/`)
 
 | File | Title | Status | Linked from |

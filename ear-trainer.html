@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Ear Trainer - m411h3wL</title>
+    <meta name="description" content="Interval ear training — sequential notes, 0–7 semitones, adaptive difficulty. Save to iPhone home screen.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Ear Trainer">
+    <link rel="canonical" href="https://m411h3wL.github.io/ear-trainer.html">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ── Layout ─────────────────────────────────────── */
+        .et-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 40px 0 28px;
+            text-align: center;
+        }
+        .et-hero h1 { font-size: 2rem; margin-bottom: 4px; }
+        .et-hero p  { font-size: 0.9rem; opacity: 0.6; }
+
+        .et-main { padding: 28px 0 72px; }
+
+        /* ── Cards ───────────────────────────────────────── */
+        .et-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px 20px;
+            max-width: 480px;
+            margin: 0 auto 16px;
+        }
+
+        /* ── Stat chips ──────────────────────────────────── */
+        .et-stats {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .et-chip {
+            background: #f1f5f9;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+        .et-chip em { font-style: normal; color: #2563eb; }
+
+        /* ── Buttons ─────────────────────────────────────── */
+        .et-btn {
+            display: block;
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            padding: 18px 20px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 10px;
+            min-height: 60px;
+            transition: filter 0.15s, transform 0.1s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .et-btn:active { transform: scale(0.97); }
+        .et-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+        .et-btn-blue   { background: #2563eb; color: #fff; }
+        .et-btn-blue:hover:not(:disabled) { filter: brightness(1.1); }
+
+        .et-btn-outline {
+            background: transparent;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+        .et-btn-outline:hover:not(:disabled) { background: #eff6ff; }
+
+        .et-btn-green  { background: #16a34a; color: #fff; }
+        .et-btn-green:hover { filter: brightness(1.1); }
+
+        .et-btn-red    { background: #dc2626; color: #fff; }
+        .et-btn-red:hover { filter: brightness(1.1); }
+
+        .et-btn-row { display: flex; gap: 10px; }
+        .et-btn-row .et-btn { margin-bottom: 0; }
+
+        /* ── Settings ────────────────────────────────────── */
+        .et-settings {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 480px;
+            margin: 0 auto 16px;
+        }
+        .et-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+            margin-bottom: 14px;
+        }
+        .et-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .et-row-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #475569;
+            flex: 1;
+        }
+        .et-row select {
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 0.88rem;
+            background: #fff;
+            color: #1e293b;
+            min-width: 120px;
+        }
+        .et-row input[type="range"] {
+            width: 120px;
+            accent-color: #2563eb;
+        }
+
+        /* toggle switch */
+        .et-toggle { position: relative; display: inline-block; width: 42px; height: 22px; flex-shrink: 0; }
+        .et-toggle input { opacity: 0; width: 0; height: 0; }
+        .et-slider {
+            position: absolute; inset: 0;
+            background: #cbd5e1; border-radius: 22px; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .et-slider:before {
+            content: ''; position: absolute;
+            width: 16px; height: 16px; left: 3px; bottom: 3px;
+            background: #fff; border-radius: 50%; transition: transform 0.2s;
+        }
+        .et-toggle input:checked + .et-slider { background: #2563eb; }
+        .et-toggle input:checked + .et-slider:before { transform: translateX(20px); }
+
+        /* ── Answer display ──────────────────────────────── */
+        .et-answer-row {
+            background: #f8fafc;
+            border-left: 4px solid #2563eb;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+        }
+        .et-answer-name { font-size: 1rem; font-weight: 700; color: #1e293b; }
+        .et-answer-sub  { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+
+        /* ── Note dots ───────────────────────────────────── */
+        .et-note-seq {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 4px 0 18px;
+        }
+        .et-dot {
+            width: 46px; height: 46px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 700; color: #1e293b;
+        }
+        .et-dot.playing { background: #2563eb; color: #fff; }
+        .et-arrow { font-size: 1.1rem; color: #94a3b8; }
+
+        /* ── Adaptive flash ──────────────────────────────── */
+        .et-flash {
+            text-align: center;
+            font-size: 0.88rem;
+            font-weight: 700;
+            padding: 9px 14px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .et-flash-up   { background: #dcfce7; color: #16a34a; }
+        .et-flash-down { background: #fee2e2; color: #dc2626; }
+
+        /* ── Playing indicator ───────────────────────────── */
+        .et-playing {
+            text-align: center;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #2563eb;
+            height: 22px;
+            margin-bottom: 10px;
+        }
+
+        /* ── Section label inside card ───────────────────── */
+        .et-card-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #94a3b8;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        /* ── Utility ─────────────────────────────────────── */
+        .et-hidden { display: none !important; }
+        .et-intro {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">m411h3wL</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/#projects">Projects</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="/#about">About</a></li>
+                <li><a href="theatre.html">Theatre</a></li>
+                <li><a href="bookshelf.html">Bookshelf</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="et-hero">
+        <div class="container">
+            <h1>Ear Trainer</h1>
+            <p>Unison → Perfect 5th &nbsp;·&nbsp; adaptive difficulty &nbsp;·&nbsp; save to home screen</p>
+        </div>
+    </div>
+
+    <div class="et-main">
+        <div class="container">
+
+            <!-- Settings (idle only) -->
+            <div id="et-settings" class="et-settings">
+                <div class="et-label">Session settings</div>
+
+                <div class="et-row">
+                    <span class="et-row-label">Adaptive difficulty</span>
+                    <label class="et-toggle">
+                        <input type="checkbox" id="s-adapt" checked>
+                        <span class="et-slider"></span>
+                    </label>
+                </div>
+
+                <div class="et-row">
+                    <span class="et-row-label">Starting notes</span>
+                    <select id="s-notes">
+                        <option value="2">2 notes (1 interval)</option>
+                        <option value="3">3 notes (2 intervals)</option>
+                        <option value="4">4 notes (3 intervals)</option>
+                    </select>
+                </div>
+
+                <div class="et-row">
+                    <span class="et-row-label">Starting BPM: <strong id="s-bpm-val">60</strong></span>
+                    <input type="range" id="s-bpm" min="40" max="120" step="10" value="60">
+                </div>
+
+                <div class="et-row">
+                    <span class="et-row-label">Include unison (0 semitones)</span>
+                    <label class="et-toggle">
+                        <input type="checkbox" id="s-unison">
+                        <span class="et-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Trainer card -->
+            <div class="et-card">
+
+                <!-- Stats bar -->
+                <div id="et-stats" class="et-stats et-hidden">
+                    <div class="et-chip">BPM <em id="v-bpm">60</em></div>
+                    <div class="et-chip">Notes <em id="v-notes">2</em></div>
+                    <div class="et-chip">Streak <em id="v-streak">0</em></div>
+                    <div class="et-chip">Acc <em id="v-acc">—</em></div>
+                </div>
+
+                <!-- Adaptive flash -->
+                <div id="et-flash" class="et-flash et-hidden"></div>
+
+                <!-- Playing indicator -->
+                <div id="et-playing" class="et-playing et-hidden">♪ playing…</div>
+
+                <!-- Note dots (revealed phase) -->
+                <div id="et-seq" class="et-note-seq et-hidden"></div>
+
+                <!-- IDLE -->
+                <div id="ph-idle">
+                    <p class="et-intro">
+                        Listen to sequential notes played as quarter notes.<br>
+                        Identify each interval, then reveal the answer.<br>
+                        Difficulty adapts to your performance.
+                    </p>
+                    <button class="et-btn et-btn-blue" onclick="startSession()">Start Session</button>
+                </div>
+
+                <!-- READY -->
+                <div id="ph-ready" class="et-hidden">
+                    <p class="et-card-label">Exercise ready</p>
+                    <button id="btn-hear" class="et-btn et-btn-blue" onclick="hearIt()">♫ Hear It</button>
+                </div>
+
+                <!-- HEARD -->
+                <div id="ph-heard" class="et-hidden">
+                    <button class="et-btn et-btn-outline" onclick="playAgain()">↺ Again</button>
+                    <button class="et-btn et-btn-blue" onclick="showAnswer()">Show Answer</button>
+                </div>
+
+                <!-- REVEALED -->
+                <div id="ph-revealed" class="et-hidden">
+                    <div id="et-answer"></div>
+                    <button class="et-btn et-btn-outline" style="margin-top:4px; margin-bottom:12px;" onclick="playAgain()">↺ Hear again</button>
+                    <p class="et-card-label">How did you do?</p>
+                    <div class="et-btn-row">
+                        <button class="et-btn et-btn-green" onclick="respond(true)">✓ Got it</button>
+                        <button class="et-btn et-btn-red"   onclick="respond(false)">✗ Missed</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 m411h3wL. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/m411h3wL" target="_blank">GitHub</a>
+                <a href="https://x.com/mattslindley" target="_blank">X</a>
+                <a href="https://www.linkedin.com/in/matt-lindley/" target="_blank">LinkedIn</a>
+                <a href="https://www.youtube.com/@mattlindleymusic" target="_blank">YouTube</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // ── Constants ────────────────────────────────────────────────────────────
+    const INTERVAL_NAMES = [
+        'Unison (P1)',
+        'Minor 2nd (m2)',
+        'Major 2nd (M2)',
+        'Minor 3rd (m3)',
+        'Major 3rd (M3)',
+        'Perfect 4th (P4)',
+        'Tritone (A4/d5)',
+        'Perfect 5th (P5)'
+    ];
+
+    const MIN_BPM = 40, MAX_BPM = 120, BPM_STEP = 10;
+    const MIN_NOTES = 2, MAX_NOTES = 4;
+    const ADAPT_WINDOW = 5; // evaluate last N responses
+
+    // ── State ────────────────────────────────────────────────────────────────
+    let ctx = null;
+    let isPlaying = false;
+    let phase = 'idle';
+
+    const S = {
+        bpm: 60,
+        noteCount: 2,
+        autoAdapt: true,
+        includeUnison: false,
+        history: [],       // boolean[]
+        streak: 0,
+        total: 0,
+        correct: 0,
+        notes: [],         // MIDI numbers for current exercise
+        intervals: []      // signed semitone differences
+    };
+
+    // ── Audio ────────────────────────────────────────────────────────────────
+    function ensureCtx() {
+        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+    }
+
+    function midiToHz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+
+    function midiName(m) {
+        const ns = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+        return ns[m % 12] + (Math.floor(m / 12) - 1);
+    }
+
+    function scheduleNote(hz, t0, dur) {
+        const osc  = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'triangle';
+        osc.frequency.value = hz;
+
+        const atk = 0.025;
+        const rel = t0 + dur * 0.72;
+        const end = t0 + dur + 0.07;
+        gain.gain.setValueAtTime(0, t0);
+        gain.gain.linearRampToValueAtTime(0.42, t0 + atk);
+        gain.gain.setValueAtTime(0.42, rel);
+        gain.gain.exponentialRampToValueAtTime(0.0001, end);
+        osc.start(t0);
+        osc.stop(end + 0.01);
+    }
+
+    function playSequence() {
+        ensureCtx();
+        const beat = 60 / S.bpm;        // seconds per quarter note
+        const t0   = ctx.currentTime + 0.06;
+        S.notes.forEach((m, i) => scheduleNote(midiToHz(m), t0 + i * beat, beat * 0.82));
+        // return total playback duration in ms (last note's end)
+        return ((S.notes.length - 1) * beat + beat * 0.82 + 0.12) * 1000;
+    }
+
+    // ── Exercise generation ──────────────────────────────────────────────────
+    function generateExercise() {
+        let notes, intervals, ok = false;
+        while (!ok) {
+            // Root: E3 (52) to G4 (67) — room for ±7 semitones stays in E2–D5
+            const root = Math.floor(Math.random() * 16) + 52;
+            notes = [root];
+            intervals = [];
+            for (let i = 1; i < S.noteCount; i++) {
+                let s;
+                do { s = Math.floor(Math.random() * 15) - 7; }
+                while (!S.includeUnison && s === 0);
+                intervals.push(s);
+                notes.push(notes[notes.length - 1] + s);
+            }
+            ok = notes.every(n => n >= 40 && n <= 84);
+        }
+        S.notes = notes;
+        S.intervals = intervals;
+    }
+
+    // ── Adaptive logic ───────────────────────────────────────────────────────
+    function adapt() {
+        if (!S.autoAdapt) return;
+        const win = S.history.slice(-ADAPT_WINDOW);
+        if (win.length < 3) return;
+        const acc = win.filter(Boolean).length / win.length;
+
+        if (acc >= 0.8) {
+            if (S.bpm < MAX_BPM) {
+                S.bpm = Math.min(MAX_BPM, S.bpm + BPM_STEP);
+                flash('↑ ' + S.bpm + ' BPM', 'up');
+            } else if (S.noteCount < MAX_NOTES) {
+                S.noteCount++;
+                S.bpm = MIN_BPM + BPM_STEP;
+                flash('▲ Level up: ' + S.noteCount + ' notes', 'up');
+            }
+        } else if (acc <= 0.4) {
+            if (S.bpm > MIN_BPM) {
+                S.bpm = Math.max(MIN_BPM, S.bpm - BPM_STEP);
+                flash('↓ ' + S.bpm + ' BPM', 'down');
+            } else if (S.noteCount > MIN_NOTES) {
+                S.noteCount--;
+                S.bpm = MIN_BPM + BPM_STEP * 2;
+                flash('▼ Back to ' + S.noteCount + ' notes', 'down');
+            }
+        }
+    }
+
+    // ── UI helpers ───────────────────────────────────────────────────────────
+    function setPhase(p) {
+        phase = p;
+        ['idle','ready','heard','revealed'].forEach(name =>
+            document.getElementById('ph-' + name).classList.toggle('et-hidden', name !== p)
+        );
+    }
+
+    function updateStats() {
+        document.getElementById('v-bpm').textContent    = S.bpm;
+        document.getElementById('v-notes').textContent  = S.noteCount;
+        document.getElementById('v-streak').textContent = S.streak;
+        document.getElementById('v-acc').textContent    =
+            S.total > 0 ? Math.round(S.correct / S.total * 100) + '%' : '—';
+    }
+
+    function flash(msg, dir) {
+        const el = document.getElementById('et-flash');
+        el.textContent = msg;
+        el.className = 'et-flash et-flash-' + (dir === 'up' ? 'up' : 'down');
+        el.classList.remove('et-hidden');
+        clearTimeout(flash._t);
+        flash._t = setTimeout(() => el.classList.add('et-hidden'), 2000);
+    }
+
+    function showPlaying(on) {
+        document.getElementById('et-playing').classList.toggle('et-hidden', !on);
+    }
+
+    function buildSeq() {
+        const el = document.getElementById('et-seq');
+        el.innerHTML = '';
+        S.notes.forEach((m, i) => {
+            if (i > 0) {
+                const arr = document.createElement('span');
+                arr.className = 'et-arrow';
+                arr.textContent = '→';
+                el.appendChild(arr);
+            }
+            const dot = document.createElement('div');
+            dot.className = 'et-dot';
+            dot.textContent = midiName(m);
+            el.appendChild(dot);
+        });
+        el.classList.remove('et-hidden');
+    }
+
+    function buildAnswer() {
+        const el = document.getElementById('et-answer');
+        el.innerHTML = '';
+        S.intervals.forEach((s, i) => {
+            const from = midiName(S.notes[i]);
+            const to   = midiName(S.notes[i + 1]);
+            const abs  = Math.abs(s);
+            const name = INTERVAL_NAMES[abs];
+            const dir  = s === 0 ? '' : s > 0 ? ' ↑ up' : ' ↓ down';
+            const sign = s > 0 ? '+' : '';
+            const row  = document.createElement('div');
+            row.className = 'et-answer-row';
+            row.innerHTML =
+                '<div class="et-answer-name">' + from + ' → ' + to + ': ' + name + dir + '</div>' +
+                '<div class="et-answer-sub">' + sign + s + ' semitone' + (abs !== 1 ? 's' : '') + '</div>';
+            el.appendChild(row);
+        });
+    }
+
+    // ── Actions ──────────────────────────────────────────────────────────────
+    function startSession() {
+        S.autoAdapt    = document.getElementById('s-adapt').checked;
+        S.noteCount    = parseInt(document.getElementById('s-notes').value);
+        S.bpm          = parseInt(document.getElementById('s-bpm').value);
+        S.includeUnison = document.getElementById('s-unison').checked;
+        S.history = []; S.streak = 0; S.total = 0; S.correct = 0;
+
+        document.getElementById('et-settings').classList.add('et-hidden');
+        document.getElementById('et-stats').classList.remove('et-hidden');
+
+        nextExercise();
+    }
+
+    function nextExercise() {
+        generateExercise();
+        document.getElementById('et-seq').classList.add('et-hidden');
+        document.getElementById('et-answer').innerHTML = '';
+        document.getElementById('btn-hear').disabled = false;
+        showPlaying(false);
+        updateStats();
+        setPhase('ready');
+    }
+
+    function hearIt() {
+        if (isPlaying) return;
+        isPlaying = true;
+        document.getElementById('btn-hear').disabled = true;
+        showPlaying(true);
+        const ms = playSequence();
+        setTimeout(() => {
+            isPlaying = false;
+            showPlaying(false);
+            setPhase('heard');
+        }, ms + 120);
+    }
+
+    function playAgain() {
+        if (isPlaying) return;
+        isPlaying = true;
+        showPlaying(true);
+        const ms = playSequence();
+        setTimeout(() => { isPlaying = false; showPlaying(false); }, ms + 120);
+    }
+
+    function showAnswer() {
+        buildSeq();
+        buildAnswer();
+        setPhase('revealed');
+    }
+
+    function respond(wasCorrect) {
+        S.total++;
+        if (wasCorrect) { S.correct++; S.streak++; } else { S.streak = 0; }
+        S.history.push(wasCorrect);
+        if (S.history.length > 10) S.history.shift();
+        adapt();
+        updateStats();
+        setTimeout(nextExercise, 160);
+    }
+
+    // ── Settings live update ─────────────────────────────────────────────────
+    document.getElementById('s-bpm').addEventListener('input', function () {
+        document.getElementById('s-bpm-val').textContent = this.value;
+    });
+    </script>
+</body>
+</html>
