@@ -15,6 +15,8 @@ To **hide** something: remove its card from `blog.html` / `index.html`
 
 | File | Title | Status | Linked from |
 |---|---|---|---|
+| `some-notes-on-ear-training.html` | Some Notes on Ear Training | Shown | `blog.html` |
+| `freeform-thought.html` | Freeform Thought | Shown | `blog.html` |
 | `the-future-of-the-sme.html` | The Future of the SME | Shown | `blog.html` |
 | `the-spaceship-question.html` | The Spaceship Question | Shown | `blog.html` |
 | `hearing-the-branch-snap.html` | Hearing the Branch Snap | Shown | `blog.html` |
