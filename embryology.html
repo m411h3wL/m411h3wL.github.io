@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Embryology, In Order - m411h3wL</title>
+    <meta name="description" content="An interactive walk through the first four weeks of human development, in physical order — fertilization to the C-shaped embryo — with every structure colored by the germ layer it comes from.">
+    <link rel="canonical" href="https://m411h3wL.github.io/embryology.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="m411h3wL">
+    <meta property="og:title" content="Embryology, In Order - m411h3wL">
+    <meta property="og:description" content="The first four weeks of human development, in physical order, with every structure colored by germ layer.">
+    <meta property="og:url" content="https://m411h3wL.github.io/embryology.html">
+    <meta property="og:image" content="https://m411h3wL.github.io/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@mattslindley">
+    <meta name="twitter:title" content="Embryology, In Order - m411h3wL">
+    <meta name="twitter:description" content="The first four weeks of human development, in physical order, with every structure colored by germ layer.">
+    <meta name="twitter:image" content="https://m411h3wL.github.io/assets/og-image.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --ecto: #3b82f6;
+            --meso: #ef4444;
+            --endo: #eab308;
+            --pluri: #8b5cf6;
+            --extra: #a8927a;
+            --ink: #0f172a;
+            --muted: #64748b;
+        }
+
+        /* ── Hero ────────────────────────────────────────── */
+        .em-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 40px 0 28px;
+            text-align: center;
+        }
+        .em-hero h1 { font-size: 2rem; margin-bottom: 4px; }
+        .em-hero p  { font-size: 0.95rem; opacity: 0.65; max-width: 640px; margin: 0 auto; }
+
+        .em-main { padding: 24px 0 72px; }
+
+        /* ── Timeline ────────────────────────────────────── */
+        .em-timeline {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 4px 2px 10px;
+            margin-bottom: 16px;
+            scrollbar-width: thin;
+        }
+        .em-tick {
+            flex: 1 0 auto;
+            min-width: 64px;
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 10px;
+            padding: 6px 8px;
+            font: inherit;
+            font-size: 0.75rem;
+            color: var(--muted);
+            cursor: pointer;
+            text-align: center;
+            line-height: 1.3;
+            transition: background .15s, color .15s, border-color .15s;
+        }
+        .em-tick b { display: block; font-size: 0.85rem; color: var(--dark); }
+        .em-tick:hover { border-color: #94a3b8; }
+        .em-tick.on { background: var(--dark); border-color: var(--dark); color: #cbd5e1; }
+        .em-tick.on b { color: #fff; }
+        .em-week {
+            display: flex;
+            gap: 6px;
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 4px;
+        }
+
+        /* ── Layout ──────────────────────────────────────── */
+        .em-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+            gap: 20px;
+            align-items: start;
+        }
+        @media (max-width: 900px) {
+            .em-grid { grid-template-columns: minmax(0, 1fr); }
+        }
+        .em-grid > * { min-width: 0; }
+
+        .em-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px 20px;
+        }
+        .em-figure { padding: 10px; }
+        .em-figure #figure { overflow-x: auto; }
+        .em-figure svg { display: block; width: 100%; height: auto; }
+        @media (max-width: 640px) { .em-figure svg { min-width: 620px; } }
+
+        .em-stagehead { padding: 4px 8px 6px; }
+        .em-stagehead .meta { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+        .em-stagehead h2 { font-size: 1.35rem; line-height: 1.25; margin-top: 2px; }
+
+        .em-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 8px 8px 4px;
+        }
+        .em-btn {
+            border: 1px solid var(--border);
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 8px 14px;
+            font: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        .em-btn:hover:not(:disabled) { background: #f1f5f9; border-color: #94a3b8; }
+        .em-btn:disabled { opacity: .4; cursor: default; }
+        .em-btn.on { background: var(--dark); color: #fff; border-color: var(--dark); }
+        .em-spacer { flex: 1; }
+
+        /* ── Legend ──────────────────────────────────────── */
+        .em-legend { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 8px 2px; }
+        .em-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font: inherit;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+        }
+        .em-chip i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .em-chip.on { border-color: var(--dark); box-shadow: inset 0 0 0 1px var(--dark); }
+        .em-hint { font-size: 0.75rem; color: var(--muted); padding: 4px 8px 0; }
+
+        /* ── Side panel ──────────────────────────────────── */
+        .em-side { display: flex; flex-direction: column; gap: 16px; }
+        .em-side h3 {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        .em-text { font-size: 0.95rem; line-height: 1.65; }
+        .em-new { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+        .em-new button {
+            border: none;
+            border-radius: 6px;
+            padding: 3px 8px;
+            font: inherit;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .em-info .name { font-size: 1.15rem; font-weight: 700; line-height: 1.3; }
+        .em-info .layer {
+            display: inline-block;
+            margin: 6px 0 10px;
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .em-info dl { font-size: 0.9rem; line-height: 1.55; }
+        .em-info dt { font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-top: 10px; }
+        .em-info dd { margin: 2px 0 0; }
+        .em-lineage { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+        .em-lineage button {
+            border: 1px solid var(--border);
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 1px 7px;
+            font: inherit;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        .em-lineage button.here { background: var(--dark); color: #fff; border-color: var(--dark); }
+        .em-lineage span { color: var(--muted); font-size: 0.8rem; }
+        .em-empty { color: var(--muted); font-size: 0.9rem; }
+
+        .em-note { font-size: 0.8rem; color: var(--muted); margin-top: 20px; line-height: 1.6; }
+
+        /* ── SVG ─────────────────────────────────────────── */
+        .st { cursor: pointer; transition: opacity .2s; }
+        .st:hover { opacity: .85; }
+        .lab { cursor: pointer; transition: opacity .2s; }
+        .lab line { stroke: #475569; stroke-width: 1; }
+        .lab circle { fill: #475569; }
+        .lab text {
+            font-size: 13px;
+            font-weight: 600;
+            fill: #1e293b;
+            paint-order: stroke;
+            stroke: #fff;
+            stroke-width: 4px;
+            stroke-linejoin: round;
+        }
+        .lab:hover text { fill: #2563eb; }
+        .cap { font-size: 13px; font-weight: 700; fill: #64748b; text-anchor: middle; letter-spacing: .02em; }
+        .hint { font-size: 12px; fill: #94a3b8; font-style: italic; text-anchor: middle; }
+        svg.dim .st:not(.lit), svg.dim .lab:not(.lit) { opacity: .15; }
+        svg.nolabels .lab { display: none; }
+        .beat { animation: beat 0.9s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.12); } 30% { transform: scale(1); } }
+        @media (prefers-reduced-motion: reduce) { .beat { animation: none; } }
+        .fade { animation: fade .35s ease; }
+        @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">m411h3wL</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/#projects">Projects</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="/#about">About</a></li>
+                <li><a href="theatre.html">Theatre</a></li>
+                <li><a href="bookshelf.html">Bookshelf</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="em-hero">
+        <div class="container">
+            <h1>Embryology, In Order</h1>
+            <p>Anatomy makes more sense when you watch it get built. Weeks 1–4, one stage at a time. Every structure is colored by the germ layer it comes from.</p>
+        </div>
+    </div>
+
+    <main class="em-main">
+        <div class="container">
+            <div class="em-timeline" id="timeline" role="tablist" aria-label="Developmental stages"></div>
+
+            <div class="em-grid">
+                <div class="em-card em-figure">
+                    <div class="em-stagehead">
+                        <div class="meta" id="stageMeta"></div>
+                        <h2 id="stageTitle"></h2>
+                    </div>
+                    <div id="figure"></div>
+                    <div class="em-legend" id="legend"></div>
+                    <div class="em-hint">Tap any structure or label. Tap a germ layer to isolate it. ← → keys step through stages.</div>
+                    <div class="em-controls">
+                        <button class="em-btn" id="prev">← Prev</button>
+                        <button class="em-btn" id="next">Next →</button>
+                        <span class="em-spacer"></span>
+                        <button class="em-btn on" id="labelsBtn" aria-pressed="true">Labels</button>
+                    </div>
+                </div>
+
+                <div class="em-side">
+                    <div class="em-card">
+                        <h3>What's happening</h3>
+                        <div class="em-text" id="stageText"></div>
+                        <div class="em-new" id="stageNew"></div>
+                    </div>
+                    <div class="em-card em-info" id="info">
+                        <h3>Structure</h3>
+                        <p class="em-empty">Tap a structure in the figure to see where it came from and what it becomes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="em-note">Schematic drawings, not to scale. Days follow the Carnegie staging system and are approximate; real embryos vary by a day or two. Sources: Langman's <em>Medical Embryology</em>; Moore, Persaud &amp; Torchia, <em>The Developing Human</em>; O'Rahilly &amp; Müller, <em>Developmental Stages in Human Embryos</em>.</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 m411h3wL. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/m411h3wL" target="_blank">GitHub</a>
+                <a href="https://x.com/mattslindley" target="_blank">X</a>
+                <a href="https://www.linkedin.com/in/matt-lindley/" target="_blank">LinkedIn</a>
+                <a href="https://www.youtube.com/@mattlindleymusic" target="_blank">YouTube</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // ── Germ layers ──────────────────────────────────────────────────────────
+    const LAYERS = {
+        ecto:  { name: 'Ectoderm',          c: '#3b82f6', f: '#93c5fd' },
+        meso:  { name: 'Mesoderm',          c: '#ef4444', f: '#fca5a5' },
+        endo:  { name: 'Endoderm',          c: '#eab308', f: '#fde047' },
+        pluri: { name: 'Before germ layers', c: '#8b5cf6', f: '#c4b5fd' },
+        extra: { name: 'Extraembryonic',     c: '#a8927a', f: '#d6c7b4' },
+        mat:   { name: 'Maternal',           c: '#db7093', f: '#fbe4ec' },
+        fluid: { name: 'Fluid space',        c: '#0ea5e9', f: '#eaf5fb' },
+    };
+    const FILTERABLE = ['ecto', 'meso', 'endo', 'pluri', 'extra'];
+
+    // ── Structures ───────────────────────────────────────────────────────────
+    // n: name · L: layer · f: fill override · d: what it is · b: what it becomes · lin: lineage keys
+    const S = {
+        zygote: { n: 'Zygote', L: 'pluri', lin: ['zygote'],
+            d: 'The single cell formed when sperm and oocyte combine. Totipotent: it can make every cell of the embryo and of the placenta.',
+            b: 'Everything: the whole embryo, plus the placenta and membranes.' },
+        pronuclei: { n: 'Pronuclei', L: 'pluri', f: '#7c3aed', lin: ['zygote', 'pronuclei'],
+            d: 'One maternal and one paternal nucleus. In humans they don’t fuse directly: their membranes break down and the two chromosome sets join on the first mitotic spindle.',
+            b: 'The genome of every cell in the body.' },
+        zona: { n: 'Zona pellucida', L: 'extra', f: '#cbd5e1',
+            d: 'A glycoprotein shell made by the oocyte. It blocks extra sperm from entering and keeps the embryo from implanting too early, in the uterine tube.',
+            b: 'Nothing. The blastocyst hatches out of it around day 5 and it is shed.' },
+        polar: { n: 'Polar bodies', L: 'extra', f: '#e2e8f0',
+            d: 'Tiny cells discarded during the oocyte’s meiotic divisions. They carry the extra chromosome sets.',
+            b: 'Nothing. They degenerate.' },
+        blastomere: { n: 'Blastomeres', L: 'pluri', lin: ['zygote', 'blastomere'],
+            d: 'The cells produced by cleavage. Each division splits the cytoplasm without growing, so the cells get smaller and smaller.',
+            b: 'Every cell of the embryo and placenta. Very early blastomeres are thought to be totipotent.' },
+        morula: { n: 'Morula', L: 'pluri', lin: ['zygote', 'blastomere', 'morula'],
+            d: 'A compact ball of 16 or more cells (“morula” is Latin for mulberry). Around the 8-cell stage the cells compact, and the inside and outside cells start down different paths.',
+            b: 'Outer cells → trophoblast. Inner cells → inner cell mass.' },
+        icm: { n: 'Inner cell mass (embryoblast)', L: 'pluri', lin: ['zygote', 'morula', 'icm'],
+            d: 'The cluster of cells at one pole of the blastocyst. This is the side that will face the uterine wall: the embryonic pole.',
+            b: 'The embryo itself, plus the amnion, yolk sac and extraembryonic mesoderm.' },
+        troph: { n: 'Trophoblast', L: 'extra', lin: ['zygote', 'morula', 'troph'],
+            d: 'The outer shell of the blastocyst. It is the first tissue to become committed to a fate that isn’t the embryo.',
+            b: 'The fetal part of the placenta (chorion).' },
+        blastocoel: { n: 'Blastocyst cavity (blastocoel)', L: 'fluid',
+            d: 'A fluid-filled cavity opened up by trophoblast cells pumping ions and water into the morula.',
+            b: 'Lined by hypoblast cells, it becomes the primary yolk sac.' },
+        endometrium: { n: 'Endometrium', L: 'mat',
+            d: 'The lining of the uterus, thickened and full of glands in the secretory phase. It is ready to receive the blastocyst.',
+            b: 'The maternal part of the placenta (decidua).' },
+        cyto: { n: 'Cytotrophoblast', L: 'extra', f: '#c9b49b', lin: ['morula', 'troph', 'cyto'],
+            d: 'The inner trophoblast layer, made of distinct, dividing cells. It keeps feeding new cells into the syncytiotrophoblast.',
+            b: 'The cores of chorionic villi and the cytotrophoblast shell that anchors the placenta.' },
+        syncytio: { n: 'Syncytiotrophoblast', L: 'extra', f: '#a8927a', lin: ['morula', 'troph', 'syncytio'],
+            d: 'An invasive, multinucleated mass with no cell boundaries that digests its way into the endometrium. It secretes hCG, the hormone that pregnancy tests detect.',
+            b: 'The outer covering of every placental villus, where mother and fetus exchange gases, nutrients and waste.' },
+        lacunae: { n: 'Lacunae', L: 'fluid', f: '#f8d7da',
+            d: 'Spaces that open inside the syncytiotrophoblast around day 9. Around day 12 they fill with maternal blood from eroded capillaries.',
+            b: 'The intervillous space of the placenta.' },
+        maternalBlood: { n: 'Maternal blood in lacunae', L: 'mat', f: '#c0392b',
+            d: 'Syncytiotrophoblast erodes maternal capillaries (sinusoids), and their blood flows into the lacunae. This is the start of uteroplacental circulation.',
+            b: 'Blood flow through the intervillous space of the placenta.' },
+        villi: { n: 'Primary villi', L: 'extra', f: '#c9b49b', lin: ['troph', 'cyto', 'villi'],
+            d: 'Columns of cytotrophoblast pushing out into the syncytium around day 13.',
+            b: 'Chorionic villi. They get a mesoderm core (secondary villi), then blood vessels (tertiary villi).' },
+        epiblast: { n: 'Epiblast', L: 'pluri', f: '#a78bfa', lin: ['zygote', 'icm', 'epiblast'],
+            d: 'The upper layer of the bilaminar disc: columnar, pluripotent cells. Everything that becomes “you” comes from here.',
+            b: 'All three germ layers, through gastrulation. It also makes the amnion.' },
+        hypoblast: { n: 'Hypoblast', L: 'extra', f: '#fde68a', lin: ['zygote', 'icm', 'hypoblast'],
+            d: 'The lower layer of the bilaminar disc: small, cuboidal cells. It sends signals that help set where the head end will be.',
+            b: 'The lining of the yolk sac. During gastrulation, definitive endoderm pushes it aside, so it contributes essentially no cells to the embryo itself.' },
+        amnion: { n: 'Amnion', L: 'extra', f: '#93c5fd', lin: ['icm', 'epiblast', 'amnion'],
+            d: 'A thin membrane of amnioblasts, which are cells from the epiblast, enclosing the amniotic cavity.',
+            b: 'The amniotic sac. It eventually expands to surround the whole fetus and fuses with the chorion.' },
+        amnioticCavity: { n: 'Amniotic cavity', L: 'fluid',
+            d: 'A fluid space that opens inside the epiblast around day 8, dorsal to the disc.',
+            b: 'The amniotic fluid the fetus floats in. It cushions the fetus and gives it room to move and grow evenly.' },
+        yolkSac1: { n: 'Primary yolk sac', L: 'fluid',
+            d: 'The old blastocyst cavity, now lined by a thin layer of hypoblast-derived cells (the exocoelomic or Heuser’s membrane).',
+            b: 'Pinches off and is replaced by the smaller secondary yolk sac.' },
+        yolkSac2: { n: 'Secondary (definitive) yolk sac', L: 'fluid',
+            d: 'A smaller sac lined by hypoblast and, later, by endoderm. Humans don’t need it for nutrition. It is where the first blood cells and the primordial germ cells appear.',
+            b: 'Part of it is folded into the embryo as the midgut. The rest stays outside, linked to the gut by the vitelline duct.' },
+        exMeso: { n: 'Extraembryonic mesoderm', L: 'extra', f: '#f3c6bd', lin: ['icm', 'epiblast', 'exMeso'],
+            d: 'Loose connective tissue that fills the space between the trophoblast and the amnion and yolk sac, around days 11–12.',
+            b: 'Connective tissue of the chorion, amnion, yolk sac and umbilical cord. The first blood vessels form here.' },
+        chorionicCavity: { n: 'Chorionic cavity (extraembryonic coelom)', L: 'fluid',
+            d: 'Cavities in the extraembryonic mesoderm merge into one big space. Now the embryo and its two sacs hang inside it.',
+            b: 'Disappears. The amnion grows until it fills the cavity and fuses with the chorion.' },
+        connectingStalk: { n: 'Connecting stalk', L: 'extra', f: '#eab0a4', lin: ['epiblast', 'exMeso', 'connectingStalk'],
+            d: 'The one bridge of extraembryonic mesoderm left holding the embryo to the trophoblast after the chorionic cavity forms.',
+            b: 'The umbilical cord, after folding swings it to the ventral side.' },
+        primStreak: { n: 'Primitive streak', L: 'pluri', f: '#7c3aed', lin: ['icm', 'epiblast', 'primStreak'],
+            d: 'A thickened groove on the caudal midline of the epiblast. Its appearance fixes the body axes for the first time: head and tail, left and right, back and front.',
+            b: 'The route epiblast cells take to become endoderm and mesoderm. It shrinks caudally and is gone by the end of week 4. A leftover remnant can form a sacrococcygeal teratoma.' },
+        primNode: { n: 'Primitive node', L: 'pluri', f: '#5b21b6', lin: ['icm', 'epiblast', 'primNode'],
+            d: 'A raised knot at the cranial end of the streak. Cilia on its cells drive fluid flow to the left, which is how the body first tells left from right.',
+            b: 'Cells that move through the node become the notochord.' },
+        endoderm: { n: 'Definitive endoderm', L: 'endo', lin: ['icm', 'epiblast', 'primStreak', 'endoderm'],
+            d: 'The first epiblast cells through the streak. They push the hypoblast aside and take its place on the underside of the disc.',
+            b: 'The epithelial lining of the gut, the respiratory tract, liver, pancreas, thyroid, bladder and urethra.' },
+        mesoderm: { n: 'Intraembryonic mesoderm', L: 'meso', lin: ['icm', 'epiblast', 'primStreak', 'mesoderm'],
+            d: 'Epiblast cells that go through the streak and spread out sideways and forward, between ectoderm and endoderm.',
+            b: 'Muscle, bone, cartilage, the heart, blood and vessels, kidneys, gonads, the dermis and most connective tissue.' },
+        ectoderm: { n: 'Ectoderm', L: 'ecto', lin: ['icm', 'epiblast', 'ectoderm'],
+            d: 'The epiblast cells that stay on top after gastrulation.',
+            b: 'Epidermis and the whole nervous system (by way of the neural plate and neural crest).' },
+        surfaceEcto: { n: 'Surface ectoderm', L: 'ecto', lin: ['epiblast', 'ectoderm', 'surfaceEcto'],
+            d: 'Ectoderm that isn’t induced to become neural. It covers the outside of the embryo.',
+            b: 'Epidermis, hair, nails, sweat and mammary glands, tooth enamel, the lens of the eye, the inner ear, and the anterior pituitary.' },
+        buccoMem: { n: 'Oropharyngeal (buccopharyngeal) membrane', L: 'ecto', f: '#86efac', lin: ['epiblast', 'ectoderm', 'buccoMem'],
+            d: 'A spot at the cranial end where ectoderm and endoderm stick together with no mesoderm between them.',
+            b: 'Ruptures around day 26, connecting the mouth (stomodeum) to the foregut.' },
+        cloacalMem: { n: 'Cloacal membrane', L: 'ecto', f: '#86efac', lin: ['epiblast', 'ectoderm', 'cloacalMem'],
+            d: 'The same kind of mesoderm-free ectoderm–endoderm patch, at the caudal end.',
+            b: 'Ruptures in week 7, giving the openings of the anus and the urogenital sinus.' },
+        notochord: { n: 'Notochord', L: 'meso', f: '#be123c', lin: ['epiblast', 'primNode', 'notochord'],
+            d: 'A solid rod of cells running along the midline, beneath the ectoderm. It is the body’s first midline structure and a major signaling center. It tells the ectoderm above to become neural.',
+            b: 'The nucleus pulposus at the center of each intervertebral disc. The vertebral bodies form around it. Notochord remnants can give rise to a chordoma.' },
+        neuralPlate: { n: 'Neural plate', L: 'ecto', f: '#3b82f6', lin: ['epiblast', 'ectoderm', 'neuralPlate'],
+            d: 'Thickened ectoderm over the notochord. Signals from the notochord block BMP here, and ectoderm left without BMP becomes neural.',
+            b: 'The neural tube, and from it the entire brain and spinal cord.' },
+        neuralFold: { n: 'Neural folds', L: 'ecto', f: '#3b82f6', lin: ['ectoderm', 'neuralPlate', 'neuralFold'],
+            d: 'The raised edges of the neural plate. They rise, curl toward each other and fuse in the midline.',
+            b: 'The walls of the neural tube. Cells at their crests become neural crest.' },
+        neuralGroove: { n: 'Neural groove', L: 'ecto', f: '#2563eb', lin: ['ectoderm', 'neuralPlate', 'neuralGroove'],
+            d: 'The midline furrow between the rising neural folds.',
+            b: 'The lumen of the neural tube, which later becomes the brain ventricles and the central canal of the spinal cord.' },
+        neuralTube: { n: 'Neural tube', L: 'ecto', f: '#2563eb', lin: ['ectoderm', 'neuralPlate', 'neuralTube'],
+            d: 'The neural plate rolled into a tube and pinched off from the surface ectoderm. Closure starts in the future neck around day 22 and zips toward both ends.',
+            b: 'Brain (cranial end) and spinal cord. Its lumen becomes the ventricles and the central canal.' },
+        neuropore: { n: 'Neuropores', L: 'ecto', f: '#2563eb', lin: ['ectoderm', 'neuralPlate', 'neuralTube', 'neuropore'],
+            d: 'The open ends of the neural tube. The cranial neuropore closes around day 25 and the caudal one around day 28.',
+            b: 'Closed neural tube. If the cranial end fails to close the result is anencephaly; if the caudal end fails, spina bifida. Folic acid lowers the risk of both.' },
+        neuralCrest: { n: 'Neural crest', L: 'ecto', f: '#14b8a6', lin: ['ectoderm', 'neuralFold', 'neuralCrest'],
+            d: 'Cells at the crests of the neural folds that detach and migrate all over the body. It is sometimes called the fourth germ layer.',
+            b: 'Sensory and autonomic ganglia, Schwann cells, melanocytes, adrenal medulla, most bone and cartilage of the face, the septum of the heart’s outflow tract, and the odontoblasts that make dentin.' },
+        paraxial: { n: 'Paraxial mesoderm', L: 'meso', f: '#f87171', lin: ['epiblast', 'mesoderm', 'paraxial'],
+            d: 'Thick columns of mesoderm on either side of the notochord.',
+            b: 'Somites in the trunk, and somitomeres in the head.' },
+        somite: { n: 'Somites', L: 'meso', f: '#f87171', lin: ['mesoderm', 'paraxial', 'somite'],
+            d: 'Paired blocks of paraxial mesoderm, formed head-to-tail at roughly 3 pairs a day starting around day 20. Counting them is how embryologists age embryos in week 4.',
+            b: 'Sclerotome → vertebrae and ribs. Myotome → skeletal muscle of the back, body wall and limbs. Dermatome → dermis of the back. This is why spinal nerves supply segmented strips of skin and muscle.' },
+        intermediate: { n: 'Intermediate mesoderm', L: 'meso', f: '#fb923c', lin: ['epiblast', 'mesoderm', 'intermediate'],
+            d: 'A thin cord of mesoderm between the paraxial and lateral plate mesoderm.',
+            b: 'The urogenital system: kidneys, gonads and their ducts.' },
+        lateralPlate: { n: 'Lateral plate mesoderm', L: 'meso', lin: ['epiblast', 'mesoderm', 'lateralPlate'],
+            d: 'The outermost sheet of mesoderm. It splits into two layers with a cavity between them.',
+            b: 'Somatic and splanchnic mesoderm, with the intraembryonic coelom between them.' },
+        somatic: { n: 'Somatic (parietal) mesoderm', L: 'meso', f: '#fda4af', lin: ['mesoderm', 'lateralPlate', 'somatic'],
+            d: 'The upper sheet of the lateral plate, lying against the ectoderm. Together they are the somatopleure.',
+            b: 'The body wall: dermis of the ventral body, the bones and connective tissue of the limbs, and the parietal lining of the body cavities.' },
+        splanchnic: { n: 'Splanchnic (visceral) mesoderm', L: 'meso', f: '#f87171', lin: ['mesoderm', 'lateralPlate', 'splanchnic'],
+            d: 'The lower sheet of the lateral plate, lying against the endoderm. Together they are the splanchnopleure.',
+            b: 'The muscle and connective tissue of the gut wall, the heart, blood cells and vessels, and the visceral lining of organs.' },
+        coelom: { n: 'Intraembryonic coelom', L: 'fluid',
+            d: 'The space that opens between somatic and splanchnic mesoderm. At first it connects with the chorionic cavity outside the embryo.',
+            b: 'The three body cavities: pericardial, pleural and peritoneal.' },
+        heartTube: { n: 'Heart (cardiogenic mesoderm → heart tube)', L: 'meso', f: '#dc2626', lin: ['mesoderm', 'lateralPlate', 'splanchnic', 'heartTube'],
+            d: 'Heart cells first appear as a horseshoe of splanchnic mesoderm at the cranial edge of the disc. Paired tubes form and fuse, and the heart starts beating around day 22. It is the first organ to work.',
+            b: 'The heart. The tube loops, divides into chambers and grows septa during weeks 4–8.' },
+        dorsalAorta: { n: 'Dorsal aortae', L: 'meso', f: '#991b1b', lin: ['mesoderm', 'splanchnic', 'dorsalAorta'],
+            d: 'A pair of early arteries running alongside the notochord.',
+            b: 'They fuse in the trunk to form the single descending aorta.' },
+        gutTube: { n: 'Gut tube', L: 'endo', lin: ['epiblast', 'endoderm', 'gutTube'],
+            d: 'Endoderm pulled into a tube when the embryo folds, wrapped in splanchnic mesoderm.',
+            b: 'The lining of the whole digestive tract and the glands that bud off it.' },
+        foregut: { n: 'Foregut', L: 'endo', lin: ['endoderm', 'gutTube', 'foregut'],
+            d: 'The cranial part of the gut tube, pulled under the head by the head fold.',
+            b: 'Pharynx, esophagus, stomach, upper duodenum, liver, gallbladder, pancreas, and the lungs (from the respiratory bud).' },
+        midgut: { n: 'Midgut', L: 'endo', lin: ['endoderm', 'gutTube', 'midgut'],
+            d: 'The middle part of the gut tube. For now it stays open to the yolk sac.',
+            b: 'Lower duodenum to the first two-thirds of the transverse colon (supplied by the superior mesenteric artery).' },
+        hindgut: { n: 'Hindgut', L: 'endo', lin: ['endoderm', 'gutTube', 'hindgut'],
+            d: 'The caudal part of the gut tube, pulled under the tail by the tail fold. It ends at the cloaca.',
+            b: 'Last third of the transverse colon to the upper anal canal, plus the bladder and urethra lining (from the cloaca).' },
+        vitellineDuct: { n: 'Vitelline (yolk) duct', L: 'endo', f: '#fef08a', lin: ['endoderm', 'yolkSac2', 'vitellineDuct'],
+            d: 'The narrowing stalk that connects the midgut to the yolk sac after folding.',
+            b: 'Usually closes off and disappears. If part remains, it is a Meckel’s diverticulum, found in about 2% of people.' },
+        allantois: { n: 'Allantois', L: 'endo', f: '#facc15', lin: ['endoderm', 'hindgut', 'allantois'],
+            d: 'A small endoderm pouch from the hindgut region that pushes into the connecting stalk.',
+            b: 'Its blood vessels become the umbilical arteries and vein. The pouch itself becomes the urachus, then the median umbilical ligament.' },
+        dorsalMesentery: { n: 'Dorsal mesentery', L: 'meso', f: '#f87171', lin: ['mesoderm', 'splanchnic', 'dorsalMesentery'],
+            d: 'A double layer of splanchnic mesoderm hanging the gut tube from the back wall of the body.',
+            b: 'The mesenteries that carry blood vessels, lymphatics and nerves to the gut.' },
+        bodyWall: { n: 'Body wall (somatopleure)', L: 'meso', f: '#fde2e2', lin: ['mesoderm', 'lateralPlate', 'somatic', 'bodyWall'],
+            d: 'Somatic mesoderm plus overlying ectoderm. Lateral folding rolls it down and around until the edges meet in the ventral midline.',
+            b: 'The walls of the thorax and abdomen. If it doesn’t close, the result is defects like gastroschisis.' },
+        umbilicalCord: { n: 'Umbilical cord region', L: 'extra', f: '#eab0a4', lin: ['exMeso', 'connectingStalk', 'umbilicalCord'],
+            d: 'Folding gathers the connecting stalk, yolk stalk and allantois together on the ventral side of the body.',
+            b: 'The umbilical cord: two arteries and one vein in a jelly-like connective tissue, wrapped in amnion.' },
+        pharArches: { n: 'Pharyngeal arches', L: 'meso', f: '#fb7185', lin: ['mesoderm', 'paraxial', 'pharArches'],
+            d: 'Bars of tissue along the sides of the future neck. Each has a mesoderm core, neural crest, its own nerve and its own artery. Arches 1–4 are visible by day 28.',
+            b: 'Arch 1: jaw, malleus and incus, chewing muscles (CN V). Arch 2: stapes, part of the hyoid, muscles of facial expression (CN VII). Arch 3: rest of the hyoid, stylopharyngeus (CN IX). Arches 4 and 6: laryngeal cartilages and muscles of the pharynx and larynx (CN X).' },
+        upperLimb: { n: 'Upper limb bud', L: 'meso', f: '#fda4af', lin: ['mesoderm', 'lateralPlate', 'somatic', 'upperLimb'],
+            d: 'A bulge of somatic mesoderm under an ectoderm cap, appearing around day 26. A ridge of ectoderm along its tip (the apical ectodermal ridge) drives outgrowth.',
+            b: 'The arm. Bones and connective tissue come from lateral plate. Muscles migrate in from somites.' },
+        lowerLimb: { n: 'Lower limb bud', L: 'meso', f: '#fda4af', lin: ['mesoderm', 'lateralPlate', 'somatic', 'lowerLimb'],
+            d: 'Appears around day 28, about two days after the upper limb bud. The lower limb always runs a little behind the upper.',
+            b: 'The leg.' },
+        lensPlacode: { n: 'Lens placode', L: 'ecto', f: '#60a5fa', lin: ['ectoderm', 'surfaceEcto', 'lensPlacode'],
+            d: 'A thickened patch of surface ectoderm, induced by the optic vesicle growing out of the forebrain beneath it.',
+            b: 'The lens of the eye.' },
+        oticVesicle: { n: 'Otic vesicle', L: 'ecto', f: '#60a5fa', lin: ['ectoderm', 'surfaceEcto', 'oticVesicle'],
+            d: 'A thickened patch of surface ectoderm beside the hindbrain that sinks in and pinches off as a closed sac.',
+            b: 'The membranous labyrinth of the inner ear: cochlea, semicircular canals, utricle and saccule.' },
+        brain: { n: 'Forebrain prominence', L: 'ecto', f: '#93c5fd', lin: ['ectoderm', 'neuralPlate', 'neuralTube', 'brain'],
+            d: 'The enlarged cranial end of the neural tube, bulging under the surface of the head.',
+            b: 'The cerebral hemispheres, thalamus and hypothalamus, and the retinas (from the optic vesicles).' },
+    };
+
+    // ── SVG helpers ──────────────────────────────────────────────────────────
+    const fillOf = k => S[k].f || LAYERS[S[k].L].f;
+    const attrs = o => Object.entries(o).filter(([, v]) => v != null).map(([k, v]) => `${k}="${v}"`).join(' ');
+    function shape(tag, key, base, extra = {}) {
+        const a = { fill: fillOf(key), stroke: 'rgba(15,23,42,.35)', 'stroke-width': 1.2, ...base, ...extra };
+        return `<${tag} class="st" data-s="${key}" data-l="${S[key].L}" ${attrs(a)}/>`;
+    }
+    const C = (k, cx, cy, r, x) => shape('circle', k, { cx, cy, r }, x);
+    const E = (k, cx, cy, rx, ry, x) => shape('ellipse', k, { cx, cy, rx, ry }, x);
+    const P = (k, d, x) => shape('path', k, { d }, x);
+    const R = (k, x, y, width, height, ex) => shape('rect', k, { x, y, width, height, rx: 3 }, ex);
+    const ring = (k, cx, cy, r, w, x) => shape('circle', k, { cx, cy, r, fill: 'none', stroke: fillOf(k), 'stroke-width': w }, x);
+    const line = (k, d, w, x) => shape('path', k, { d, fill: 'none', stroke: fillOf(k), 'stroke-width': w, 'stroke-linecap': 'round' }, x);
+    const deco = (tag, o) => `<${tag} pointer-events="none" ${attrs(o)}/>`;
+    const cap = (x, y, t) => `<text class="cap" x="${x}" y="${y}">${t}</text>`;
+    const hint = (x, y, t) => `<text class="hint" x="${x}" y="${y}">${t}</text>`;
+    const arrow = (d, color = '#475569') => `<path d="${d}" fill="none" stroke="${color}" stroke-width="2" marker-end="url(#ah)" pointer-events="none"/>`;
+
+    // Leader-line label. Text goes on the side of (tx,ty) away from the anchor.
+    function lab(k, ax, ay, tx, ty, text) {
+        const t = text || S[k].n.replace(/ \(.*\)$/, '');
+        let anchor = tx < ax ? 'end' : tx > ax ? 'start' : 'middle';
+        const dx = anchor === 'end' ? -5 : anchor === 'start' ? 5 : 0;
+        const dy = anchor === 'middle' ? (ty < ay ? -6 : 14) : 4;
+        return `<g class="lab" data-s="${k}" data-l="${S[k].L}">
+            <line x1="${ax}" y1="${ay}" x2="${tx}" y2="${ty}"/><circle cx="${ax}" cy="${ay}" r="2.5"/>
+            <text x="${tx + dx}" y="${ty + dy}" text-anchor="${anchor}">${t}</text></g>`;
+    }
+
+    function wavy(cx, cy, r, amp, n) {
+        let d = '';
+        for (let i = 0; i <= 160; i++) {
+            const t = i / 160 * 2 * Math.PI, rr = r + amp * Math.sin(n * t) + amp * 0.5 * Math.sin(3 * n * t + 1);
+            d += (i ? 'L' : 'M') + (cx + rr * Math.cos(t)).toFixed(1) + ' ' + (cy + rr * Math.sin(t)).toFixed(1) + ' ';
+        }
+        return d + 'Z';
+    }
+    const polar = (cx, cy, r, deg) => [cx + r * Math.cos(deg * Math.PI / 180), cy + r * Math.sin(deg * Math.PI / 180)];
+
+    // Paired somite blocks in a dorsal view
+    function somitePairs(n, y0, dy, xc, gap, w, h) {
+        let s = '';
+        for (let i = 0; i < n; i++) {
+            const y = y0 + i * dy;
+            s += R('somite', xc - gap - w, y, w, h) + R('somite', xc + gap, y, w, h);
+        }
+        return s;
+    }
+
+    // Implanted conceptus shared by days 9 and 12–13
+    function conceptus(late) {
+        let s = R('endometrium', -40, 0, 920, 460, { rx: 0, stroke: 'none' });
+        // glands
+        [[90, 90], [690, 80], [110, 370], [700, 380], [60, 230], [745, 240]].forEach(([x, y]) =>
+            s += deco('ellipse', { cx: x, cy: y, rx: 14, ry: 26, fill: '#fff7fa', stroke: '#f0b7c9', 'stroke-width': 2 }));
+        s += P('syncytio', wavy(400, 240, 178, 9, 7));
+        // lacunae
+        for (let i = 0; i < 12; i++) {
+            const [x, y] = polar(400, 240, 163, i * 30 + 15);
+            s += E(late ? 'maternalBlood' : 'lacunae', x.toFixed(1), y.toFixed(1), 11, 7,
+                { transform: `rotate(${i * 30 + 105} ${x.toFixed(1)} ${y.toFixed(1)})` });
+        }
+        if (late) {
+            for (let i = 0; i < 12; i++) {
+                const a = i * 30, [x, y] = polar(400, 240, 146, a);
+                s += R('villi', (x - 7).toFixed(1), (y - 5).toFixed(1), 14, 10, { transform: `rotate(${a} ${x.toFixed(1)} ${y.toFixed(1)})`, rx: 4 });
+            }
+        }
+        s += C('cyto', 400, 240, 140);
+        if (!late) {
+            s += C('yolkSac1', 400, 240, 128, { fill: LAYERS.fluid.f, stroke: 'none' });
+            s += P('yolkSac1', 'M 332 172 C 250 190, 268 362, 400 366 C 532 362, 550 190, 468 172 Z', { fill: LAYERS.fluid.f, stroke: '#e5c96a', 'stroke-width': 4 });
+            s += P('amnioticCavity', 'M 335 152 Q 400 92 465 152 Z', { stroke: fillOf('amnion'), 'stroke-width': 4 });
+            s += P('epiblast', 'M 332 152 L 468 152 L 468 166 L 332 166 Z');
+            s += P('hypoblast', 'M 334 166 L 466 166 L 468 175 L 332 175 Z');
+        } else {
+            s += C('exMeso', 400, 240, 133);
+            s += C('chorionicCavity', 400, 246, 112, { stroke: 'none' });
+            s += P('connectingStalk', 'M 372 104 L 428 104 L 420 150 L 380 150 Z');
+            s += P('exMeso', 'M 335 167 Q 400 112 465 167 Z', { fill: 'none', stroke: fillOf('exMeso'), 'stroke-width': 12 });
+            s += P('exMeso', 'M 335 192 C 312 206, 326 272, 400 274 C 474 272, 488 206, 465 192 Z', { fill: 'none', stroke: fillOf('exMeso'), 'stroke-width': 12 });
+            s += P('yolkSac2', 'M 335 192 C 312 206, 326 272, 400 274 C 474 272, 488 206, 465 192 Z', { stroke: '#e5c96a', 'stroke-width': 4 });
+            s += P('amnioticCavity', 'M 335 167 Q 400 112 465 167 Z', { stroke: fillOf('amnion'), 'stroke-width': 4 });
+            s += P('epiblast', 'M 332 167 L 468 167 L 468 181 L 332 181 Z');
+            s += P('hypoblast', 'M 334 181 L 466 181 L 468 191 L 332 191 Z');
+        }
+        return s;
+    }
+
+    // ── Stages ───────────────────────────────────────────────────────────────
+    const STAGES = [
+    {
+        day: 'Day 1', short: 'D1', week: 1, cs: 'Carnegie stage 1',
+        title: 'Fertilization: the zygote',
+        text: 'A sperm and an oocyte combine into one cell. Inside the zona pellucida, the maternal and paternal pronuclei move toward each other. Their membranes dissolve and the chromosomes line up together on the first mitotic spindle. This single cell is <b>totipotent</b>: it will make both the embryo and the placenta.',
+        isNew: ['zygote', 'pronuclei', 'zona', 'polar'],
+        draw() {
+            const s =
+                ring('zona', 400, 230, 150, 14) +
+                C('zygote', 400, 230, 120) +
+                C('pronuclei', 366, 224, 26, { opacity: .8 }) +
+                C('pronuclei', 437, 238, 24, { opacity: .8 }) +
+                C('polar', 400, 101, 9) + C('polar', 423, 104, 7);
+            const l =
+                lab('zona', 516, 134, 600, 80) +
+                lab('zygote', 470, 300, 600, 370) +
+                lab('pronuclei', 345, 210, 200, 150) +
+                lab('polar', 398, 100, 250, 55);
+            return [s, l];
+        }
+    },
+    {
+        day: 'Days 2–3', short: 'D2–3', week: 1, cs: 'Carnegie stage 2',
+        title: 'Cleavage: dividing without growing',
+        text: 'Moving down the uterine tube, the zygote divides: 2 cells, 4, 8, 16. These cells are called <b>blastomeres</b>, and the embryo doesn’t grow while they divide. It is still trapped inside the same zona pellucida, so each division just makes smaller cells. Around the 8-cell stage the cells <b>compact</b> into a tight ball. By day 3–4 that ball has 16+ cells. It is now a <b>morula</b>, and it enters the uterus.',
+        isNew: ['blastomere', 'morula'],
+        draw() {
+            let s = '';
+            [150, 400, 650].forEach(cx => s += ring('zona', cx, 210, 95, 10));
+            s += C('blastomere', 114, 210, 48) + C('blastomere', 186, 210, 48);
+            [[-32, -32], [32, -32], [-32, 32], [32, 32]].forEach(([dx, dy]) => s += C('blastomere', 400 + dx, 210 + dy, 40));
+            for (let i = 0; i < 10; i++) { const [x, y] = polar(650, 210, 64, i * 36); s += C('morula', x.toFixed(1), y.toFixed(1), 19); }
+            for (let i = 0; i < 5; i++) { const [x, y] = polar(650, 210, 30, i * 72 + 18); s += C('morula', x.toFixed(1), y.toFixed(1), 17); }
+            s += C('morula', 650, 210, 15);
+            s += arrow('M 262 210 L 290 210') + arrow('M 512 210 L 540 210');
+            s += cap(150, 345, '2-cell · ~30 hours') + cap(400, 345, '4-cell · ~day 2') + cap(650, 345, 'Morula · ~day 3–4');
+            s += hint(400, 400, 'The zona stays the same size. The cells get smaller.');
+            const l = lab('zona', 150, 115, 150, 60) + lab('blastomere', 432, 178, 470, 70) + lab('morula', 690, 160, 720, 70);
+            return [s, l];
+        }
+    },
+    {
+        day: 'Days 4–5', short: 'D4–5', week: 1, cs: 'Carnegie stage 3',
+        title: 'Blastocyst: the first decision',
+        text: 'Fluid pumped into the morula opens a cavity, the <b>blastocoel</b>. The cells sort into two groups. The outer shell is the <b>trophoblast</b>, the future placenta. The <b>inner cell mass</b>, clustered at one pole, is the future embryo. This is the first cell-fate decision the embryo makes. Around day 5 the blastocyst <b>hatches</b> out of the zona pellucida so it can implant.',
+        isNew: ['icm', 'troph', 'blastocoel'],
+        draw() {
+            let s = ring('zona', 400, 240, 172, 7, { 'stroke-dasharray': '14 6', opacity: .8 });
+            s += C('blastocoel', 400, 240, 142, { stroke: 'none' });
+            s += ring('troph', 400, 240, 150, 16);
+            for (let i = 0; i < 18; i++) { const [x, y] = polar(400, 240, 150, i * 20 + 10); s += deco('ellipse', { cx: x.toFixed(1), cy: y.toFixed(1), rx: 4, ry: 2.5, fill: '#7c6a55', transform: `rotate(${i * 20 + 100} ${x.toFixed(1)} ${y.toFixed(1)})` }); }
+            s += P('icm', 'M 318.6 123.7 A 142 142 0 0 1 481.4 123.7 Q 400 228 318.6 123.7 Z');
+            s += hint(400, 445, 'embryonic pole is at the top, where the inner cell mass sits');
+            const l =
+                lab('icm', 420, 130, 600, 60) +
+                lab('troph', 530, 315, 640, 380) +
+                lab('blastocoel', 400, 300, 200, 400) +
+                lab('zona', 278, 118, 250, 60, 'Zona pellucida (hatching)');
+            return [s, l];
+        }
+    },
+    {
+        day: 'Days 6–8', short: 'D6–8', week: 2, cs: 'Carnegie stages 4–5',
+        title: 'Implantation begins',
+        text: 'The blastocyst attaches to the uterine lining at its embryonic pole. The trophoblast there splits in two. The inner <b>cytotrophoblast</b> keeps its cell boundaries. The outer <b>syncytiotrophoblast</b> is a multinucleated mass that eats into the endometrium and starts secreting hCG. Meanwhile, the inner cell mass reorganizes into two layers: <b>epiblast</b> on top and <b>hypoblast</b> beneath.',
+        isNew: ['cyto', 'syncytio', 'epiblast', 'hypoblast'],
+        draw() {
+            let s = R('endometrium', -40, 0, 920, 196, { rx: 0, stroke: 'none' });
+            [[80, 80], [200, 60], [600, 70], [720, 90]].forEach(([x, y]) =>
+                s += deco('ellipse', { cx: x, cy: y, rx: 13, ry: 30, fill: '#fff7fa', stroke: '#f0b7c9', 'stroke-width': 2 }));
+            s += deco('line', { x1: -40, y1: 196, x2: 880, y2: 196, stroke: '#e9a3bb', 'stroke-width': 3 });
+            s += P('syncytio', 'M 300 236 C 300 170, 330 120, 360 108 C 375 96, 390 112, 400 100 C 412 112, 428 96, 442 108 C 470 120, 500 170, 500 236 C 470 200, 440 186, 400 186 C 360 186, 330 200, 300 236 Z');
+            s += C('blastocoel', 400, 300, 113, { stroke: 'none' });
+            s += ring('cyto', 400, 300, 120, 14);
+            s += P('epiblast', 'M 335.2 207.4 A 113 113 0 0 1 464.8 207.4 L 455 228 L 345 228 Z');
+            s += P('hypoblast', 'M 345 228 L 455 228 L 448 241 L 352 241 Z');
+            const l =
+                lab('endometrium', 140, 120, 140, 30) +
+                lab('syncytio', 470, 150, 600, 120) +
+                lab('cyto', 519, 315, 640, 370) +
+                lab('epiblast', 380, 212, 230, 240) +
+                lab('hypoblast', 380, 235, 230, 285) +
+                lab('blastocoel', 420, 340, 600, 430);
+            return [s, l];
+        }
+    },
+    {
+        day: 'Day 9', short: 'D9', week: 2, cs: 'Carnegie stage 5',
+        title: 'The bilaminar disc',
+        text: 'The embryo is now a flat disc with two layers: epiblast on top, hypoblast below. A fluid space opens inside the epiblast. This is the <b>amniotic cavity</b>. Below the disc, cells from the hypoblast line the old blastocoel, turning it into the <b>primary yolk sac</b>. The conceptus is almost completely buried in the endometrium, and spaces called <b>lacunae</b> open up in the syncytiotrophoblast.',
+        isNew: ['amnioticCavity', 'yolkSac1', 'lacunae'],
+        draw() {
+            const s = conceptus(false);
+            const [lx, ly] = polar(400, 240, 163, 315);
+            const l =
+                lab('syncytio', 400, 64, 560, 22) +
+                lab('lacunae', +lx.toFixed(1), +ly.toFixed(1), 640, 60) +
+                lab('cyto', 499, 339, 640, 420) +
+                lab('amnioticCavity', 400, 132, 200, 40) +
+                lab('epiblast', 345, 159, 175, 150) +
+                lab('hypoblast', 345, 171, 175, 195) +
+                lab('yolkSac1', 400, 300, 180, 420) +
+                lab('endometrium', 740, 300, 740, 445);
+            return [s, l];
+        }
+    },
+    {
+        day: 'Days 12–13', short: 'D12–13', week: 2, cs: 'Carnegie stages 5–6',
+        title: 'Extraembryonic mesoderm and the chorionic cavity',
+        text: 'A loose tissue, <b>extraembryonic mesoderm</b>, fills the gap between the trophoblast and the amnion and yolk sac. Cavities inside it merge into one large <b>chorionic cavity</b>. That leaves the embryo hanging by a single bridge, the <b>connecting stalk</b>, which is the future umbilical cord. The yolk sac pinches down into a smaller <b>secondary yolk sac</b>. The syncytiotrophoblast breaks into maternal capillaries, and maternal blood starts flowing through the lacunae. Columns of cytotrophoblast push out as the <b>primary villi</b>.',
+        isNew: ['exMeso', 'chorionicCavity', 'connectingStalk', 'yolkSac2', 'maternalBlood', 'villi'],
+        draw() {
+            const s = conceptus(true);
+            const [bx, by] = polar(400, 240, 163, 315);
+            const [vx, vy] = polar(400, 240, 146, 150);
+            const l =
+                lab('connectingStalk', 400, 118, 560, 30) +
+                lab('maternalBlood', +bx.toFixed(1), +by.toFixed(1), 645, 80, 'Maternal blood') +
+                lab('villi', +vx.toFixed(1), +vy.toFixed(1), 160, 360) +
+                lab('exMeso', 280, 240, 230, 100) +
+                lab('chorionicCavity', 340, 320, 160, 420) +
+                lab('amnion', 445, 143, 640, 160) +
+                lab('epiblast', 345, 174, 175, 150) +
+                lab('hypoblast', 345, 186, 175, 200) +
+                lab('yolkSac2', 440, 240, 650, 300, 'Secondary yolk sac') +
+                lab('cyto', 499, 339, 640, 420);
+            return [s, l];
+        }
+    },
+    {
+        day: 'Days 14–16', short: 'D14–16', week: 3, cs: 'Carnegie stages 6–7',
+        title: 'Gastrulation: three germ layers',
+        text: 'A groove forms along the caudal midline of the epiblast: the <b>primitive streak</b>, with the <b>primitive node</b> at its cranial end. For the first time the embryo has a head end and a tail end, a left side and a right. Epiblast cells crowd toward the streak, dive through it, and spread out underneath. The first cells through replace the hypoblast and become <b>endoderm</b>. The next ones spread out between the two layers as <b>mesoderm</b>. The cells left on top become <b>ectoderm</b>. Every tissue in your body traces back to one of these three layers. In two spots, ectoderm and endoderm stay stuck together with no mesoderm between them. These are the oropharyngeal and cloacal membranes, the future mouth and anus.',
+        isNew: ['primStreak', 'primNode', 'endoderm', 'mesoderm', 'buccoMem', 'cloacalMem'],
+        draw() {
+            let s = cap(170, 30, 'DORSAL VIEW') + cap(620, 30, 'CROSS-SECTION AT DASHED LINE');
+            s += deco('line', { x1: 425, y1: 50, x2: 425, y2: 440, stroke: '#e2e8f0', 'stroke-width': 1 });
+            // dorsal view
+            s += P('epiblast', 'M 170 100 C 245 100, 262 220, 247 300 C 235 365, 205 390, 170 390 C 135 390, 105 365, 93 300 C 78 220, 95 100, 170 100 Z');
+            s += E('buccoMem', 170, 130, 16, 8);
+            s += line('primStreak', 'M 170 255 L 170 360', 11);
+            s += C('primNode', 170, 252, 10);
+            s += E('cloacalMem', 170, 376, 12, 6);
+            s += arrow('M 118 300 L 156 300', '#5b21b6') + arrow('M 222 300 L 184 300', '#5b21b6');
+            s += deco('line', { x1: 70, y1: 320, x2: 270, y2: 320, stroke: '#0f172a', 'stroke-width': 1.5, 'stroke-dasharray': '6 4' });
+            s += hint(170, 92, 'cranial') + hint(170, 412, 'caudal');
+            // cross-section
+            s += hint(620, 120, 'amniotic cavity');
+            s += P('epiblast', 'M 450 160 L 602 160 Q 620 192 638 160 L 790 160 L 790 180 L 640 180 Q 620 214 600 180 L 450 180 Z');
+            s += P('mesoderm', 'M 606 206 C 560 196, 500 200, 452 206 L 452 246 C 500 250, 560 248, 606 236 L 634 236 C 680 248, 740 250, 788 246 L 788 206 C 740 200, 680 196, 634 206 Z', { opacity: .9 });
+            for (let i = 0; i < 26; i++) {
+                const side = i % 2 ? 1 : -1, k = Math.floor(i / 2);
+                const x = 620 + side * (28 + k * 12.5), y = 214 + ((k * 7) % 22);
+                s += deco('circle', { cx: x, cy: y, r: 4, fill: '#dc2626', opacity: .55 });
+            }
+            s += R('endoderm', 480, 254, 280, 13, { rx: 2 });
+            s += R('hypoblast', 450, 254, 30, 13, { rx: 2 }) + R('hypoblast', 760, 254, 30, 13, { rx: 2 });
+            s += arrow('M 620 200 Q 600 222 540 226', '#fff') + arrow('M 620 200 Q 640 222 700 226', '#fff') + arrow('M 620 202 L 620 250', '#fff');
+            s += hint(620, 300, 'yolk sac');
+            const l =
+                lab('buccoMem', 186, 130, 290, 78, 'Oropharyngeal membrane') +
+                lab('primNode', 180, 252, 290, 200) +
+                lab('primStreak', 176, 340, 290, 300) +
+                lab('cloacalMem', 182, 376, 290, 395) +
+                lab('epiblast', 130, 200, 290, 150, 'Epiblast (→ ectoderm)') +
+                lab('primStreak', 620, 175, 680, 95, 'Primitive groove') +
+                lab('mesoderm', 740, 226, 740, 340, 'Mesoderm') +
+                lab('endoderm', 560, 262, 560, 340) +
+                lab('hypoblast', 465, 262, 465, 390, 'Hypoblast (displaced)');
+            return [s, l];
+        }
+    },
+    {
+        day: 'Days 17–19', short: 'D17–19', week: 3, cs: 'Carnegie stages 7–8',
+        title: 'Notochord, neural plate, and mesoderm divides',
+        text: 'Cells that move through the primitive node form a midline rod, the <b>notochord</b>. It signals the ectoderm above it to thicken into the <b>neural plate</b>, the first piece of the nervous system. On each side of the midline, the mesoderm organizes into three columns: <b>paraxial</b>, <b>intermediate</b> and <b>lateral plate</b>. The lateral plate then splits into two sheets around a gap, the <b>intraembryonic coelom</b>, which will become the body cavities. At the cranial edge of the disc, a horseshoe of heart-forming mesoderm appears.',
+        isNew: ['notochord', 'neuralPlate', 'paraxial', 'intermediate', 'lateralPlate', 'somatic', 'splanchnic', 'coelom', 'heartTube'],
+        draw() {
+            let s = cap(170, 30, 'DORSAL VIEW') + cap(620, 30, 'CROSS-SECTION AT DASHED LINE');
+            s += deco('line', { x1: 425, y1: 50, x2: 425, y2: 440, stroke: '#e2e8f0', 'stroke-width': 1 });
+            s += P('surfaceEcto', 'M 170 70 C 252 70, 268 220, 250 310 C 238 370, 205 400, 170 400 C 135 400, 102 370, 90 310 C 72 220, 88 70, 170 70 Z');
+            s += line('heartTube', 'M 108 150 C 98 70, 242 70, 232 150', 9, { opacity: .85 });
+            s += E('buccoMem', 170, 112, 15, 7);
+            s += P('neuralPlate', 'M 170 128 C 218 128, 226 180, 210 236 C 200 272, 188 302, 181 322 L 159 322 C 152 302, 140 272, 130 236 C 114 180, 122 128, 170 128 Z');
+            s += line('notochord', 'M 170 140 L 170 328', 4, { 'stroke-dasharray': '7 5' });
+            s += line('primStreak', 'M 170 340 L 170 378', 9);
+            s += C('primNode', 170, 336, 8);
+            s += E('cloacalMem', 170, 390, 10, 5);
+            s += deco('line', { x1: 70, y1: 268, x2: 270, y2: 268, stroke: '#0f172a', 'stroke-width': 1.5, 'stroke-dasharray': '6 4' });
+            // cross-section
+            s += hint(620, 120, 'amniotic cavity');
+            s += R('surfaceEcto', 450, 160, 340, 14, { rx: 2 });
+            s += R('neuralPlate', 572, 157, 96, 28, { rx: 10 });
+            s += C('notochord', 620, 204, 11);
+            s += E('paraxial', 565, 212, 31, 20) + E('paraxial', 675, 212, 31, 20);
+            s += E('intermediate', 515, 214, 14, 13) + E('intermediate', 725, 214, 14, 13);
+            s += R('somatic', 450, 188, 50, 11, { rx: 2 }) + R('somatic', 740, 188, 50, 11, { rx: 2 });
+            s += R('coelom', 450, 199, 50, 22, { rx: 0, stroke: 'none' }) + R('coelom', 740, 199, 50, 22, { rx: 0, stroke: 'none' });
+            s += R('splanchnic', 450, 221, 50, 11, { rx: 2 }) + R('splanchnic', 740, 221, 50, 11, { rx: 2 });
+            s += R('endoderm', 450, 240, 340, 13, { rx: 2 });
+            s += hint(620, 290, 'yolk sac');
+            const l =
+                lab('heartTube', 110, 120, 100, 48, 'Cardiogenic area') +
+                lab('buccoMem', 184, 112, 290, 82, 'Oropharyngeal memb.') +
+                lab('neuralPlate', 200, 200, 290, 170) +
+                lab('notochord', 170, 300, 290, 300, 'Notochord (beneath)') +
+                lab('primStreak', 176, 360, 290, 352) +
+                lab('neuralPlate', 600, 160, 560, 100) +
+                lab('surfaceEcto', 740, 167, 740, 105) +
+                lab('notochord', 620, 210, 620, 400) +
+                lab('paraxial', 675, 222, 700, 360) +
+                lab('intermediate', 515, 222, 520, 330) +
+                lab('somatic', 775, 193, 805, 160, 'Somatic') +
+                lab('splanchnic', 775, 226, 800, 260, 'Splanchnic') +
+                lab('coelom', 775, 210, 805, 210, 'Coelom');
+            return [s, l];
+        }
+    },
+    {
+        day: 'Days 20–21', short: 'D20–21', week: 3, cs: 'Carnegie stage 9',
+        title: 'Neural folds and the first somites',
+        text: 'The edges of the neural plate rise up as <b>neural folds</b>, with a <b>neural groove</b> down the middle. Paraxial mesoderm starts breaking into <b>somites</b>, paired blocks that form from head to tail at about 3 pairs a day. Each somite will make a slice of vertebra, back muscle and skin. Cells at the crests of the folds are becoming <b>neural crest</b>. Paired <b>dorsal aortae</b> run alongside the notochord, and beneath the head the heart tubes are fusing.',
+        isNew: ['neuralFold', 'neuralGroove', 'somite', 'neuralCrest', 'dorsalAorta'],
+        draw() {
+            let s = cap(170, 30, 'DORSAL VIEW') + cap(620, 30, 'CROSS-SECTION AT DASHED LINE');
+            s += deco('line', { x1: 425, y1: 50, x2: 425, y2: 440, stroke: '#e2e8f0', 'stroke-width': 1 });
+            s += P('surfaceEcto', 'M 170 60 C 245 60, 258 190, 243 300 C 233 372, 202 408, 170 408 C 138 408, 107 372, 97 300 C 82 190, 95 60, 170 60 Z');
+            s += P('neuralFold', 'M 170 90 C 224 90, 230 150, 210 200 C 200 228, 192 260, 186 340 L 154 340 C 148 260, 140 228, 130 200 C 110 150, 116 90, 170 90 Z');
+            s += line('heartTube', 'M 128 124 C 126 84, 214 84, 212 124', 10, { opacity: .7, 'stroke-dasharray': '5 3' });
+            s += line('neuralGroove', 'M 170 102 L 170 334', 5);
+            s += somitePairs(3, 236, 13, 170, 22, 16, 10);
+            s += line('primStreak', 'M 170 356 L 170 392', 8);
+            s += deco('line', { x1: 70, y1: 254, x2: 270, y2: 254, stroke: '#0f172a', 'stroke-width': 1.5, 'stroke-dasharray': '6 4' });
+            // cross-section
+            s += R('surfaceEcto', 450, 158, 128, 13, { rx: 2 }) + R('surfaceEcto', 662, 158, 128, 13, { rx: 2 });
+            s += P('neuralFold', 'M 572 146 Q 588 146 598 172 Q 608 200 620 200 Q 632 200 642 172 Q 652 146 668 146 L 668 170 Q 656 170 648 190 Q 636 220 620 220 Q 604 220 592 190 Q 584 170 572 170 Z');
+            s += C('neuralCrest', 574, 146, 7) + C('neuralCrest', 666, 146, 7);
+            s += C('notochord', 620, 236, 10);
+            s += E('somite', 562, 214, 30, 24) + E('somite', 678, 214, 30, 24);
+            s += C('dorsalAorta', 594, 250, 7) + C('dorsalAorta', 646, 250, 7);
+            s += E('intermediate', 514, 222, 13, 13) + E('intermediate', 726, 222, 13, 13);
+            s += R('somatic', 450, 190, 52, 11, { rx: 2 }) + R('somatic', 738, 190, 52, 11, { rx: 2 });
+            s += R('coelom', 450, 201, 52, 24, { rx: 0, stroke: 'none' }) + R('coelom', 738, 201, 52, 24, { rx: 0, stroke: 'none' });
+            s += R('splanchnic', 450, 225, 52, 11, { rx: 2 }) + R('splanchnic', 738, 225, 52, 11, { rx: 2 });
+            s += R('endoderm', 450, 262, 340, 13, { rx: 2 });
+            const l =
+                lab('heartTube', 134, 100, 95, 45, 'Heart tubes') +
+                lab('neuralFold', 214, 170, 290, 120) +
+                lab('neuralGroove', 170, 160, 290, 180) +
+                lab('somite', 200, 249, 290, 240, 'Somites (3 pairs)') +
+                lab('primStreak', 176, 380, 290, 380) +
+                lab('neuralCrest', 666, 141, 720, 90) +
+                lab('neuralGroove', 620, 196, 540, 95) +
+                lab('somite', 678, 222, 700, 330) +
+                lab('notochord', 620, 240, 600, 360) +
+                lab('dorsalAorta', 646, 254, 680, 400) +
+                lab('intermediate', 514, 228, 500, 330) +
+                lab('coelom', 760, 213, 785, 300, 'Coelom') +
+                lab('endoderm', 470, 268, 470, 400);
+            return [s, l];
+        }
+    },
+    {
+        day: 'Days 22–23', short: 'D22–23', week: 4, cs: 'Carnegie stage 10',
+        title: 'The neural tube closes and the heart beats',
+        text: 'The neural folds meet and fuse. Fusion starts in the future neck and zips toward both ends, leaving openings at each end, the <b>cranial</b> and <b>caudal neuropores</b>. The finished tube pinches off from the surface ectoderm, and neural crest cells leave the folds and migrate throughout the body. Around day 22 the heart tube starts to <b>beat</b>. It is the first organ to function. About 4–12 pairs of somites are visible.',
+        isNew: ['neuralTube', 'neuropore'],
+        draw() {
+            let s = cap(170, 30, 'DORSAL VIEW') + cap(620, 30, 'CROSS-SECTION AT DASHED LINE');
+            s += deco('line', { x1: 425, y1: 50, x2: 425, y2: 440, stroke: '#e2e8f0', 'stroke-width': 1 });
+            s += P('surfaceEcto', 'M 170 52 C 240 52, 252 180, 240 300 C 232 375, 202 414, 170 414 C 138 414, 108 375, 100 300 C 88 180, 100 52, 170 52 Z');
+            s += P('neuralFold', 'M 170 76 C 216 76, 224 135, 203 172 L 182 192 L 158 192 L 137 172 C 116 135, 124 76, 170 76 Z');
+            s += E('heartTube', 170, 112, 34, 18, { class: 'st beat', opacity: .6, 'stroke-dasharray': '4 3' });
+            s += line('neuropore', 'M 170 86 L 170 186', 5);
+            s += somitePairs(9, 198, 12, 170, 14, 18, 9);
+            s += R('neuralTube', 161, 190, 18, 132, { rx: 6 });
+            s += P('neuralFold', 'M 161 320 L 179 320 C 194 340, 194 372, 170 388 C 146 372, 146 340, 161 320 Z');
+            s += line('neuropore', 'M 170 326 L 170 380', 4);
+            s += deco('line', { x1: 70, y1: 250, x2: 270, y2: 250, stroke: '#0f172a', 'stroke-width': 1.5, 'stroke-dasharray': '6 4' });
+            // cross-section
+            s += P('surfaceEcto', 'M 450 176 C 520 166, 560 138, 620 136 C 680 138, 720 166, 790 176 L 790 189 C 720 179, 680 151, 620 149 C 560 151, 520 179, 450 189 Z');
+            s += C('neuralTube', 620, 180, 25) + C('neuralTube', 620, 180, 7, { fill: LAYERS.fluid.f });
+            [[588, 164], [578, 176], [566, 186], [652, 164], [662, 176], [674, 186]].forEach(([x, y]) => s += C('neuralCrest', x, y, 5));
+            s += arrow('M 560 192 L 540 214', '#0f766e') + arrow('M 680 192 L 700 214', '#0f766e');
+            s += C('notochord', 620, 222, 9);
+            s += E('somite', 566, 214, 26, 22) + E('somite', 674, 214, 26, 22);
+            s += C('dorsalAorta', 596, 248, 7) + C('dorsalAorta', 644, 248, 7);
+            s += E('intermediate', 524, 230, 12, 12) + E('intermediate', 716, 230, 12, 12);
+            s += P('somatic', 'M 450 204 C 480 202, 498 206, 510 214 L 506 222 C 494 215, 478 212, 450 214 Z') + P('somatic', 'M 790 204 C 760 202, 742 206, 730 214 L 734 222 C 746 215, 762 212, 790 214 Z');
+            s += P('coelom', 'M 450 214 C 478 212, 494 215, 506 222 L 504 240 C 490 234, 474 232, 450 234 Z', { stroke: 'none' }) + P('coelom', 'M 790 214 C 762 212, 746 215, 734 222 L 736 240 C 750 234, 766 232, 790 234 Z', { stroke: 'none' });
+            s += P('splanchnic', 'M 450 234 C 474 232, 490 234, 504 240 L 502 250 C 488 244, 472 242, 450 244 Z') + P('splanchnic', 'M 790 234 C 766 232, 750 234, 736 240 L 738 250 C 752 244, 768 242, 790 244 Z');
+            s += P('endoderm', 'M 450 268 C 540 262, 580 258, 620 258 C 660 258, 700 262, 790 268 L 790 281 C 700 275, 660 271, 620 271 C 580 271, 540 275, 450 281 Z');
+            s += hint(620, 445, 'the sides are starting to curl down (folding is next)');
+            const l =
+                lab('heartTube', 140, 110, 100, 40, 'Heart (beneath)') +
+                lab('neuropore', 196, 110, 290, 85, 'Cranial neuropore') +
+                lab('neuralTube', 179, 270, 290, 190) +
+                lab('somite', 196, 230, 290, 240, 'Somites (~10 pairs)') +
+                lab('neuropore', 178, 360, 290, 360, 'Caudal neuropore') +
+                lab('neuralTube', 640, 172, 700, 90) +
+                lab('surfaceEcto', 500, 175, 470, 120) +
+                lab('neuralCrest', 566, 186, 520, 300, 'Neural crest, migrating') +
+                lab('somite', 690, 222, 770, 300) +
+                lab('dorsalAorta', 644, 254, 650, 380) +
+                lab('notochord', 620, 226, 600, 420);
+            return [s, l];
+        }
+    },
+    {
+        day: 'Days 24–26', short: 'D24–26', week: 4, cs: 'Carnegie stages 11–12',
+        title: 'Folding: from a flat disc to a tube within a tube',
+        text: 'The disc grows faster than the yolk sac under it, so it buckles. Head and tail curl under (<b>cephalocaudal folding</b>), and the sides roll down until they meet in the midline (<b>lateral folding</b>). Folding pulls the endoderm into a <b>gut tube</b>: foregut, midgut and hindgut. The midgut is still open to the yolk sac through the <b>vitelline duct</b>. The heart swings under the head into the future chest. The coelom gets enclosed as the body cavity, and the connecting stalk ends up on the belly side as the umbilical cord. The body plan is now set: a gut tube inside a body-wall tube, with the neural tube running along the back. The cranial neuropore closes around day 25.',
+        isNew: ['gutTube', 'foregut', 'midgut', 'hindgut', 'vitellineDuct', 'allantois', 'dorsalMesentery', 'bodyWall'],
+        draw() {
+            let s = cap(215, 30, 'MIDLINE (SAGITTAL) SECTION · HEAD LEFT') + cap(620, 30, 'CROSS-SECTION THROUGH THE TRUNK');
+            s += deco('line', { x1: 462, y1: 50, x2: 462, y2: 440, stroke: '#e2e8f0', 'stroke-width': 1 });
+            // sagittal
+            s += E('amnioticCavity', 215, 210, 185, 145, { stroke: fillOf('amnion'), 'stroke-width': 3 });
+            s += P('connectingStalk', 'M 300 296 L 340 296 L 405 400 L 368 412 Z');
+            s += line('allantois', 'M 318 268 C 330 300, 350 340, 376 392', 5);
+            s += P('bodyWall', 'M 70 220 C 70 130, 170 100, 230 108 C 310 118, 370 165, 368 235 C 366 280, 345 300, 320 300 L 115 300 C 85 300, 70 265, 70 220 Z', { stroke: fillOf('surfaceEcto'), 'stroke-width': 4 });
+            s += E('brain', 116, 188, 32, 38, { stroke: fillOf('neuralTube'), 'stroke-width': 3 });
+            s += line('neuralTube', 'M 138 160 C 175 136, 205 134, 232 136 C 300 144, 345 182, 345 236', 13);
+            s += line('notochord', 'M 128 228 C 145 182, 198 162, 236 164 C 290 170, 326 200, 330 240', 5);
+            s += line('foregut', 'M 122 260 C 132 248, 165 246, 205 248', 12);
+            s += line('midgut', 'M 205 248 L 257 248', 12);
+            s += line('hindgut', 'M 257 248 C 296 250, 324 258, 330 280', 12);
+            s += E('buccoMem', 117, 262, 4, 10);
+            s += E('cloacalMem', 332, 287, 8, 4);
+            s += E('heartTube', 150, 292, 28, 20, { class: 'st beat' });
+            s += R('vitellineDuct', 220, 252, 22, 90, { rx: 6 });
+            s += C('yolkSac2', 231, 375, 38, { stroke: '#e5c96a', 'stroke-width': 3 });
+            s += arrow('M 44 150 C 26 210, 34 262, 76 316') + arrow('M 398 160 C 418 230, 410 280, 372 318');
+            // cross-section
+            s += E('bodyWall', 620, 228, 122, 150, { stroke: fillOf('surfaceEcto'), 'stroke-width': 5 });
+            s += C('neuralTube', 620, 118, 22) + C('neuralTube', 620, 118, 6, { fill: LAYERS.fluid.f });
+            s += E('neuralCrest', 583, 130, 8, 10) + E('neuralCrest', 657, 130, 8, 10);
+            s += C('notochord', 620, 158, 8);
+            s += E('somite', 566, 152, 25, 20) + E('somite', 674, 152, 25, 20);
+            s += C('dorsalAorta', 601, 186, 7) + C('dorsalAorta', 639, 186, 7);
+            s += E('intermediate', 552, 194, 11, 11) + E('intermediate', 688, 194, 11, 11);
+            s += E('coelom', 620, 282, 92, 70, { stroke: 'none' });
+            s += E('somatic', 620, 282, 92, 70, { fill: 'none', stroke: fillOf('somatic'), 'stroke-width': 6 });
+            s += R('dorsalMesentery', 613, 194, 14, 66, { rx: 2 });
+            s += C('splanchnic', 620, 282, 33);
+            s += C('gutTube', 620, 282, 21) + C('gutTube', 620, 282, 7, { fill: LAYERS.fluid.f });
+            const l =
+                lab('brain', 100, 175, 60, 70, 'Forebrain') +
+                lab('neuralTube', 280, 147, 300, 70) +
+                lab('notochord', 290, 172, 380, 112) +
+                lab('foregut', 170, 246, 175, 216) +
+                lab('midgut', 245, 248, 285, 205) +
+                lab('hindgut', 326, 268, 405, 250) +
+                lab('heartTube', 132, 300, 60, 390, 'Heart') +
+                lab('buccoMem', 115, 268, 55, 300, 'Oroph. memb.') +
+                lab('vitellineDuct', 220, 320, 150, 340) +
+                lab('yolkSac2', 205, 395, 120, 430, 'Yolk sac') +
+                lab('allantois', 360, 365, 420, 350) +
+                lab('connectingStalk', 392, 405, 420, 440, 'Stalk → cord') +
+                lab('neuralTube', 642, 112, 762, 70) +
+                lab('neuralCrest', 657, 135, 762, 100, 'Neural crest') +
+                lab('somite', 690, 158, 762, 130) +
+                lab('dorsalAorta', 639, 190, 762, 160) +
+                lab('dorsalMesentery', 627, 230, 762, 220) +
+                lab('gutTube', 641, 282, 762, 280) +
+                lab('coelom', 680, 320, 762, 340, 'Coelom') +
+                lab('bodyWall', 732, 250, 762, 370, 'Body wall') +
+                lab('intermediate', 699, 194, 762, 190, 'Intermediate') +
+                lab('splanchnic', 651, 292, 762, 310, 'Splanchnic');
+            return [s, l];
+        }
+    },
+    {
+        day: 'Day 28', short: 'D28', week: 4, cs: 'Carnegie stage 13',
+        title: 'End of week 4: the C-shaped embryo',
+        text: 'About 4–6 mm long. Both neuropores have closed. Roughly 30 pairs of somites bulge under the skin of the back. <b>Pharyngeal arches</b> line the future neck, and the heart makes a big bulge on the front of the body. The <b>upper and lower limb buds</b> are out. Thickened patches of ectoderm mark the future lens of the eye and the inner ear. The basic body plan is now complete. In weeks 5–8, every organ system develops out of the parts already in place.',
+        isNew: ['pharArches', 'upperLimb', 'lowerLimb', 'lensPlacode', 'oticVesicle', 'brain'],
+        draw() {
+            const body = 'M 330 105 C 420 30, 575 90, 568 240 C 562 350, 490 415, 410 405 C 380 400, 372 380, 392 372 C 425 368, 455 340, 452 305 C 450 285, 430 280, 425 275 C 445 245, 430 200, 385 195 C 360 192, 340 205, 320 200 C 290 195, 280 160, 300 130 C 310 115, 318 110, 330 105 Z';
+            let s = P('umbilicalCord', 'M 440 300 C 400 312, 360 330, 300 352 L 306 372 C 366 352, 410 336, 452 322 Z');
+            s += P('surfaceEcto', body, { fill: '#e0ecfd', stroke: LAYERS.ecto.c, 'stroke-width': 2.5 });
+            s += E('brain', 352, 138, 46, 34, { opacity: .55, stroke: 'none' });
+            // somites along the back
+            for (let i = 0; i < 30; i++) {
+                const a = -96 + i * 7.2, [x, y] = polar(462, 238, 98, a);
+                s += R('somite', (x - 6).toFixed(1), (y - 4).toFixed(1), 12, 8, { rx: 2, transform: `rotate(${a + 90} ${x.toFixed(1)} ${y.toFixed(1)})` });
+            }
+            [[316, 186, 17, 9, -30], [343, 196, 15, 8, -10], [366, 196, 12, 7, 10], [384, 190, 9, 6, 30]].forEach(([x, y, rx, ry, rot]) =>
+                s += E('pharArches', x, y, rx, ry, { transform: `rotate(${rot} ${x} ${y})` }));
+            s += E('heartTube', 400, 238, 36, 40, { class: 'st beat' });
+            s += E('upperLimb', 458, 262, 13, 24, { transform: 'rotate(20 458 262)' });
+            s += E('lowerLimb', 470, 352, 12, 20, { transform: 'rotate(-40 470 352)' });
+            s += C('lensPlacode', 322, 146, 9);
+            s += C('oticVesicle', 392, 150, 8);
+            s += hint(400, 445, 'actual size: about 5 mm crown to rump');
+            const l =
+                lab('brain', 360, 120, 300, 40) +
+                lab('lensPlacode', 318, 150, 230, 140, 'Lens placode (eye)') +
+                lab('oticVesicle', 395, 147, 470, 40, 'Otic vesicle (inner ear)') +
+                lab('pharArches', 330, 196, 230, 230) +
+                lab('heartTube', 380, 250, 230, 290, 'Heart prominence') +
+                lab('somite', 548, 200, 640, 170, 'Somites (~30 pairs)') +
+                lab('upperLimb', 462, 270, 640, 270) +
+                lab('lowerLimb', 476, 356, 640, 380) +
+                lab('umbilicalCord', 330, 350, 230, 390, 'Umbilical cord');
+            return [s, l];
+        }
+    },
+    ];
+
+    // ── State & rendering ────────────────────────────────────────────────────
+    let idx = 0, selected = null, layerFilter = null, showLabels = true;
+    const $ = id => document.getElementById(id);
+
+    function svgFor(stage) {
+        const [shapes, labels] = stage.draw();
+        return `<svg viewBox="-40 0 920 460" role="img" aria-label="${stage.title}" class="fade${showLabels ? '' : ' nolabels'}">
+            <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+            <rect x="-40" y="0" width="920" height="460" fill="#fff"/>
+            <g>${shapes}</g><g>${labels}</g></svg>`;
+    }
+
+    function chip(k, cls = '') {
+        const L = LAYERS[S[k].L];
+        return `<button data-s="${k}" class="${cls}" style="background:${L.c}">${S[k].n.replace(/ \(.*\)$/, '')}</button>`;
+    }
+
+    function render() {
+        const st = STAGES[idx];
+        $('stageMeta').textContent = `${st.day} · ${st.cs}`;
+        $('stageTitle').textContent = st.title;
+        $('stageText').innerHTML = st.text;
+        $('stageNew').innerHTML = '<span style="font-size:.75rem;color:var(--muted);font-weight:700;align-self:center">NEW:</span>' + st.isNew.map(k => chip(k)).join('');
+        $('figure').innerHTML = svgFor(st);
+        $('prev').disabled = idx === 0;
+        $('next').disabled = idx === STAGES.length - 1;
+        document.querySelectorAll('.em-tick').forEach((b, i) => {
+            b.classList.toggle('on', i === idx);
+            b.setAttribute('aria-selected', i === idx);
+        });
+        const on = document.querySelector('.em-tick.on');
+        if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        applyHighlight();
+        history.replaceState(null, '', '#stage-' + (idx + 1));
+    }
+
+    function applyHighlight() {
+        const svg = $('figure').querySelector('svg');
+        if (!svg) return;
+        const els = svg.querySelectorAll('.st, .lab');
+        els.forEach(e => e.classList.remove('lit'));
+        let active = false;
+        if (layerFilter) {
+            active = true;
+            els.forEach(e => { if (e.dataset.l === layerFilter) e.classList.add('lit'); });
+        } else if (selected && svg.querySelector(`[data-s="${selected}"]`)) {
+            active = true;
+            els.forEach(e => { if (e.dataset.s === selected) e.classList.add('lit'); });
+        }
+        svg.classList.toggle('dim', active);
+        document.querySelectorAll('#legend .em-chip').forEach(c => c.classList.toggle('on', c.dataset.l === layerFilter));
+    }
+
+    function showInfo(k) {
+        selected = k;
+        layerFilter = null;
+        const s = S[k], L = LAYERS[s.L];
+        const lin = s.lin ? `<dt>Lineage</dt><dd class="em-lineage">${s.lin.map((x, i) =>
+            (i ? '<span>→</span>' : '') + `<button data-s="${x}" class="${x === k ? 'here' : ''}">${S[x].n.replace(/ \(.*\)$/, '')}</button>`).join('')}</dd>` : '';
+        const where = STAGES.findIndex(st => st.isNew.includes(k));
+        const first = where >= 0 ? `<dt>First appears</dt><dd><a href="#stage-${where + 1}" data-goto="${where}">${STAGES[where].day}: ${STAGES[where].title}</a></dd>` : '';
+        $('info').innerHTML = `<h3>Structure</h3>
+            <div class="name">${s.n}</div>
+            <span class="layer" style="background:${L.c}">${L.name}</span>
+            <dl><dt>What it is</dt><dd>${s.d}</dd>
+            <dt>Becomes</dt><dd>${s.b}</dd>${lin}${first}</dl>`;
+        applyHighlight();
+    }
+
+    function go(i) {
+        idx = Math.max(0, Math.min(STAGES.length - 1, i));
+        render();
+    }
+
+    // ── Build static UI ──────────────────────────────────────────────────────
+    $('timeline').innerHTML = STAGES.map((st, i) =>
+        `<button class="em-tick" role="tab" data-i="${i}"><b>${st.short}</b>Wk ${st.week}</button>`).join('');
+    $('legend').innerHTML = FILTERABLE.map(l =>
+        `<button class="em-chip" data-l="${l}"><i style="background:${LAYERS[l].c}"></i>${LAYERS[l].name}</button>`).join('');
+
+    // ── Events ───────────────────────────────────────────────────────────────
+    $('timeline').addEventListener('click', e => { const b = e.target.closest('.em-tick'); if (b) go(+b.dataset.i); });
+    $('prev').addEventListener('click', () => go(idx - 1));
+    $('next').addEventListener('click', () => go(idx + 1));
+    $('labelsBtn').addEventListener('click', e => {
+        showLabels = !showLabels;
+        e.currentTarget.classList.toggle('on', showLabels);
+        e.currentTarget.setAttribute('aria-pressed', showLabels);
+        $('figure').querySelector('svg').classList.toggle('nolabels', !showLabels);
+    });
+    $('legend').addEventListener('click', e => {
+        const c = e.target.closest('.em-chip'); if (!c) return;
+        layerFilter = layerFilter === c.dataset.l ? null : c.dataset.l;
+        if (layerFilter) selected = null;
+        applyHighlight();
+    });
+    $('figure').addEventListener('click', e => {
+        const t = e.target.closest('[data-s]');
+        if (t) showInfo(t.dataset.s);
+        else { selected = null; layerFilter = null; applyHighlight(); }
+    });
+    document.addEventListener('click', e => {
+        const b = e.target.closest('#stageNew [data-s], .em-lineage [data-s]');
+        if (b) showInfo(b.dataset.s);
+        const g = e.target.closest('[data-goto]');
+        if (g) { e.preventDefault(); go(+g.dataset.goto); }
+    });
+    document.addEventListener('keydown', e => {
+        if (e.target.matches('input, textarea')) return;
+        if (e.key === 'ArrowRight') go(idx + 1);
+        if (e.key === 'ArrowLeft') go(idx - 1);
+        if (e.key === 'Escape') { selected = null; layerFilter = null; applyHighlight(); }
+    });
+
+    const m = location.hash.match(/stage-(\d+)/);
+    go(m ? +m[1] - 1 : 0);
+    </script>
+</body>
+</html>

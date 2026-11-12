@@ -29,6 +29,7 @@ To **hide** something: remove its card from `blog.html` / `index.html`
 | File | Title | Status | Linked from |
 |---|---|---|---|
 | `ear-trainer.html` | Ear Trainer | Shown | direct URL / home screen |
+| `embryology.html` | Embryology, In Order | Shown | `index.html` (Featured Projects) |
 
 ## Projects (`projects/`)
 
