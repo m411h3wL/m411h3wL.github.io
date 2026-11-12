@@ -181,3 +181,18 @@
         font-size: 1rem;
     }
 }
+
+/* Per-project accent colors (sponsor palettes) — swap the hex values to match exactly */
+.paper.accent-bbraun { --primary: #00a97a; --primary-dark: #007a58; --light: #effaf6; }
+.paper.accent-goodshepherd { --primary: #1f4e8c; --primary-dark: #163a69; --light: #f0f5fb; }
+
+.figure-placeholder {
+    margin: 2rem 0;
+    padding: 2.5rem 1.5rem;
+    border: 2px dashed var(--border);
+    border-radius: 6px;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.85rem;
+    color: var(--secondary);
+}

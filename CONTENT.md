@@ -38,3 +38,5 @@ To **hide** something: remove its card from `blog.html` / `index.html`
 | `outreach-graph.html` | Outreach Graph | Shown | `index.html` (Featured Projects) |
 | `job-grabber.html` | Job Grabber | Shown | `index.html` (Featured Projects) |
 | `giulio-camilo.html` | Giulio Camilo | Hidden | — |
+| `catheter-connector.html` | Catheter Connector (B. Braun) | Shown | `index.html` (Featured Projects) |
+| `good-shepherd.html` | Treadmill Grip (Good Shepherd) | Shown | `index.html` (Featured Projects) |
