@@ -182,9 +182,9 @@
     }
 }
 
-/* Per-project accent colors (sponsor palettes) — swap the hex values to match exactly */
+/* Per-project accent colors, taken from each sponsor's own site/logo */
 .paper.accent-bbraun { --primary: #00a97a; --primary-dark: #007a58; --light: #effaf6; }
-.paper.accent-goodshepherd { --primary: #1f4e8c; --primary-dark: #163a69; --light: #f0f5fb; }
+.paper.accent-goodshepherd { --primary: #0A2136; --primary-dark: #00B5C2; --light: #eefafb; }
 
 .figure-placeholder {
     margin: 2rem 0;
