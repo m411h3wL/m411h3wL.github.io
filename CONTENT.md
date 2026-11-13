@@ -40,3 +40,4 @@ To **hide** something: remove its card from `blog.html` / `index.html`
 | `giulio-camilo.html` | Giulio Camilo | Hidden | — |
 | `catheter-connector.html` | Catheter Connector (B. Braun) | Shown | `index.html` (Featured Projects) |
 | `good-shepherd.html` | Treadmill Grip (Good Shepherd) | Shown | `index.html` (Featured Projects) |
+| `hydrogel-ecg.html` | Hydrogel ECG Electrodes (BMES 2025) | Shown | `index.html` (Featured Projects) |

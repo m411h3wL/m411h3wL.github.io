@@ -185,6 +185,7 @@
 /* Per-project accent colors, taken from each sponsor's own site/logo */
 .paper.accent-bbraun { --primary: #00a97a; --primary-dark: #007a58; --light: #effaf6; }
 .paper.accent-goodshepherd { --primary: #0A2136; --primary-dark: #00B5C2; --light: #eefafb; }
+.paper.accent-lehigh { --primary: #653819; --primary-dark: #4a2810; --light: #faf5ef; }
 
 .figure-placeholder {
     margin: 2rem 0;
